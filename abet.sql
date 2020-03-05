@@ -16,7 +16,7 @@ create table PerformanceLevels(
 create table Outcomes(
 	outcomeId int(3),
 	outcomeDescription varchar(200),
-	major ENUM("CS", "EE", "CpE")
+	major ENUM("CS", "EE", "CpE"),
 	PRIMARY KEY (outcomeId, major));
 
 create table Sections(
@@ -35,7 +35,7 @@ create table OutcomeResults(
 	performanceLevel int(2),
 	numberOfStudents int(3),
 	FOREIGN KEY (sectionId) REFERENCES Sections (sectionId),
-	FOREIGN KEY (outcomeId) REFERENCES Outcomes (outcomeId),
+	FOREIGN KEY (outcomeId, major) REFERENCES Outcomes (outcomeId, major),
 	FOREIGN KEY (performanceLevel) REFERENCES PerformanceLevels (performanceLevel));
 
 create table Assessments(
@@ -45,7 +45,7 @@ create table Assessments(
 	outcomeId int(3),
 	major ENUM("CS", "EE", "CpE"),
 	FOREIGN KEY (sectionId) REFERENCES Sections (sectionId),
-	FOREIGN KEY (outcomeId) REFERENCES Outcomes (outcomeId));
+	FOREIGN KEY (outcomeId, major) REFERENCES Outcomes (outcomeId, major));
 
 create table Narratives(
 	sectionId int(3),
@@ -55,7 +55,7 @@ create table Narratives(
 	weaknesses varchar(200),
 	actions varchar(50),
 	FOREIGN KEY (sectionId) REFERENCES Sections (sectionId),
-	FOREIGN KEY (outcomeId) REFERENCES Outcomes (outcomeId));
+	FOREIGN KEY (outcomeId, major) REFERENCES Outcomes (outcomeId, major));
 
 create table CourseOutcomeMapping(
 	courseId varchar(8),
@@ -64,4 +64,4 @@ create table CourseOutcomeMapping(
 	semester varchar(8),
 	year int(4),
 	FOREIGN KEY (courseId) REFERENCES Courses (courseId),
-	FOREIGN KEY (outcomeId) REFERENCES Outcomes (outcomeId));
+	FOREIGN KEY (outcomeId, major) REFERENCES Outcomes (outcomeId, major));
