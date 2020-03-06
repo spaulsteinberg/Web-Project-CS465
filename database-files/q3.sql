@@ -3,4 +3,5 @@ SELECT p.description, o.numberOfStudents
 	WHERE o.outcomeId = 2
 		AND o.major = 'CS'
 		AND o.sectionId = 3
-		AND o.performanceLevel = p.performanceLevel;
+		AND o.performanceLevel = p.performanceLevel
+	ORDER BY p.performanceLevel;
