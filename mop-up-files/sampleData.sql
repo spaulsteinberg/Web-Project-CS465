@@ -3,10 +3,10 @@
 --
 
 INSERT INTO `Instructors` (`instructorId`, `firstname`, `lastname`, `email`, `password`) VALUES
-((12, 'Brad', 'Vander Zanden', 'bvanderz@utk.edu', '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19'),
-(13, 'Wily', 'Coyote', 'coyote@utk.edu', '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19',
+(12, 'Brad', 'Vander Zanden', 'bvanderz@utk.edu', '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19'),
+(13, 'Wily', 'Coyote', 'coyote@utk.edu', '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19'),
 (14, 'Michael', 'Berry', 'mberry@utk.edu', '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19'),
-(15, 'Mia', 'Test User', 'testuser@utk.edu', '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19'));
+(15, 'Mia', 'Test User', 'testuser@utk.edu', '*2470C0C06DEE42FD1618BB99005ADCA2EC9D1E19');
 
 -- --------------------------------------------------------
 
@@ -71,8 +71,8 @@ INSERT INTO `PerformanceLevels` (`performanceLevel`, `description`) VALUES
 --
 
 INSERT INTO `Assessments` (`sectionId`, `assessmentDescription`, `weight`, `outcomeId`, `major`) VALUES
-(2, 'Homeworks 1, 3 and 10', '20', 'C1', 'CS'),
-(2, 'Midterm questions on functional languages.', '80', 'C1', 'CS'),
+(2, 'Homeworks 1, 3 and 10', '20', 1, 'CS'),
+(2, 'Midterm questions on functional languages.', '80', 1, 'CS'),
 (3, '\'Evil \"use\" of quotes to mess up \'foo\" with <em>the italics</em>\"brad \'vander zanden\'\"', '15', 2, 'CS'),
 (3, '<b>Don\'t allow</b> mis-placed \' quotes to \" mess you up', 10, 2, 'CS'),
 (3, 'Labs 1 and 6', 60, 2, 'CS'),
