@@ -30,6 +30,7 @@ main {
 #abet {
     color: gray;
     padding-left: 1%;
+    font-weight: normal;
 }
 #profile .person {
     width: 22px;
@@ -46,4 +47,28 @@ main {
 }
 .container-section-title {
     padding-left: 5%;
+}
+.container-results {
+    font-size: 42px;
+    padding: 2% 3% 0 3%;
+    opacity: 0.75;
+}
+hr {
+    border:0;
+    border-top:1px solid #eee;
+    margin:20px 0
+}
+.main-results-description p {
+    padding: 0 3% 0 3%;
+    font-size: 17px;
+}
+.outcome-description{
+    border-radius: 4px;
+    background-color: whitesmoke;
+    border: 1px solid lightgray;
+    margin: 0 3% 0 3%;
+}
+.outcome-description #embedded-description{
+    font-size: 17px;
+    padding: 0 2em 1% 1em;
 }
