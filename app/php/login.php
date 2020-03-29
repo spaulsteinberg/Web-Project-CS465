@@ -1,22 +1,15 @@
-<html>
-<head><title>PHP Login Page</title></head>
-<body>
     <?php
         //set up the connection here --> this is my local DB for now
         function connect(){
-            $servername = "localhost";
-            $dbname = "my_test_db";
-            $username = "UelBerg";
-            $password = "Tiggy921#";
+            $servername = "dbs2.eecs.utk.edu";
+            $dbname = "cosc465_ssteinb2";
+            $username = "ssteinb2";
+            $password = "Tigers812@";
             // Create connection
             $conn = new mysqli($servername, $username, $password, $dbname);
             // Check connection
             if ($conn->connect_error) {
                 die("Connection failed: " . $conn->connect_error);
-            }
-            else {
-                echo "Connection established successfully";
-                echo "<br>";
             }
             return $conn;
         }
@@ -27,8 +20,7 @@
             $data = htmlspecialchars($data);
             return $data;
         }
-    ?>
-    <?php
+	
         error_reporting(E_ALL); //report errors
         ini_set('display_errors', 1); //set display error mode
 
@@ -53,16 +45,30 @@
 
         //set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
         //...the accepted is to see if anything came up, if false the email or pass is incorrect
-        //re-work sql statement for actual use!
-        $query = "SELECT firstName, lastName FROM users WHERE email=? AND password=PASSWORD(?)";
+       $query = "SELECT 
+					i.instructorId, s.sectionId, s.courseId, c.major, c.semester, c.year
+				  FROM 
+					Instructors i, Sections s, CourseOutcomeMapping c 
+				  WHERE 
+					i.email=? AND 
+					i.password=PASSWORD(?) AND
+					i.instructorId = s.instructorId AND
+					s.courseId = c.courseId AND
+					s.semester = c.semester AND
+					s.year = c.year
+				  ORDER BY
+					c.year DESC,
+					c.semester ASC";
+
         $stmt = $conn->prepare($query);
         $stmt->bind_param("ss", $userEmail, $userPassword); //ss for types of binded params
         if ($stmt->execute()) {
-            $stmt->bind_result($fname, $lname);
+            $stmt->bind_result($instructorId, $sectionId, $courseId, $major, $semester, $year);
             $accepted = false;
             while ($stmt->fetch()) {
                 $accepted = true;
-                echo json_encode(array('firstName' => $fname, 'lastName' => $lname));
+                echo json_encode(array('instructorId' => $instructorId, 'sectionId' => $sectionId,
+									   'courseId' => $courseId, 'major' => $major, 'semester' => $semester, 'year' => $year));
             }
             if(!$accepted){
                 echo json_encode(array('msg' => 'No results'));
@@ -74,5 +80,3 @@
         }
         $conn->close();
     ?>
-</body>
-</html>
