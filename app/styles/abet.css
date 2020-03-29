@@ -1,0 +1,49 @@
+header{
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid lightgray;
+    background-color: whitesmoke;
+    height: 7%;
+}
+#container {
+    display: flex;
+    flex-direction: row;
+    height: 90%;
+}
+html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+nav {
+    flex: 0 1 20%;
+    border-right: 1px solid lightgray;
+    background-color: whitesmoke;
+}
+main {
+    background-color: white;
+    flex: 0 1 80%;
+}
+#abet {
+    color: gray;
+    padding-left: 1%;
+}
+#profile .person {
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+   /* object-fit: cover;*/
+}
+#profile .caret {
+    width: 12px;
+    height: 12px;
+    display: inline-flex;
+    padding-right: 2vw;
+    padding-top: 0.5vw;
+}
+.container-section-title {
+    padding-left: 5%;
+}
