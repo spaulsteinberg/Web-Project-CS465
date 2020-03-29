@@ -45,7 +45,7 @@
 
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
-   $query = "SELECT 
+    $query = "SELECT 
 				i.instructorId, s.sectionId, s.courseId, c.major, c.semester, c.year
 			  FROM 
 				Instructors i, Sections s, CourseOutcomeMapping c 
