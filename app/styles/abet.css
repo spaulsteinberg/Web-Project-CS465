@@ -34,7 +34,7 @@ main {
 }
 #profile .person {
     width: 22px;
-    height: 22px;
+    height: 18px;
     display: inline-flex;
    /* object-fit: cover;*/
 }
@@ -47,8 +47,9 @@ main {
 }
 .container-section-title {
     padding-left: 5%;
+    padding-top: 3%;
 }
-.container-results {
+.container-header {
     font-size: 42px;
     padding: 2% 3% 0 3%;
     opacity: 0.75;
@@ -116,4 +117,38 @@ hr {
         background-color:whitesmoke;
         height: 1px;
         margin: auto;
+  }
+  .section-dropdown {
+      padding-left: 5%;
+  }
+  .course-dropdown {
+    width: 95%;
+    height: 100%;
+    padding: 2% 0 2% 6%;
+    border-radius: 5px;
+    font-size: larger;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+  }
+  .course-dropdown::-ms-expand {
+    display: none;
+  }
+  .outcome-links {
+      padding-top: 5%;
+  }
+  .section-outcome {    
+    text-decoration: none;
+  }
+  .section-outcome div:hover {
+    background-color: #e8e8e8;
+  }
+  a div {
+      width: 100%;
+      padding: 3% 0 3% 5%;
+      font-size: large;
+      color: #337ab7;
+  }
+  .new-hr {
+      border-top: 1px solid lightgray;
+      margin: 0;
   }
