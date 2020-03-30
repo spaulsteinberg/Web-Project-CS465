@@ -9,7 +9,8 @@ header{
 #container {
     display: flex;
     flex-direction: row;
-    height: 90%;
+    height: 100%;
+    flex-grow: 1;
 }
 html, body {
     height: 100%;
@@ -22,6 +23,7 @@ nav {
     flex: 0 1 20%;
     border-right: 1px solid lightgray;
     background-color: whitesmoke;
+    height: 100%;
 }
 main {
     background-color: white;
