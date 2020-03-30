@@ -9,8 +9,8 @@
       <div id="abet"> <h2>UTK ABET</h2> </div>
       <div id="profile">
         <h2> 
-          <img class="person" src="../images/person.png" alt="person.png"> 
-          <img class="caret" src="../images/caret-bottom-2x.png" alt="caret.png">
+          <input type="image" class="person" src="../images/person.png" alt="person.png"> 
+          <input type="image" class="caret" src="../images/caret-bottom-2x.png" alt="caret.png">
         </h2>
       </div>
     </header>
@@ -88,30 +88,56 @@
               <th ><strong>Description</strong></th>
               <th><strong>Remove</strong></th>
             </tr>
-          <tr>
-              <td class="weights"><input type="number" min="1"></td>
-              <td><textarea class="assess-description" rows="4" cols="120" maxlength="400"></textarea></td>
-              <td class="trash-can"><img src="../images/trash.png"></td>
-          </tr>
-          <tr>
-            <td class="weights"><input type="number" min="1"></td>
-            <td><textarea class="assess-description" rows="4" cols="120" maxlength="400"></textarea></td>
-            <td class="trash-can"><img src="../images/trash.png"></td>
-        </tr>
-        <tr>
-          <td class="weights"><input type="number" min="1"></td>
-          <td><textarea class="assess-description" rows="4" cols="120" maxlength="400"></textarea></td>
-          <td class="trash-can"><img src="../images/trash.png"></td>
+      <tr>
+        <td class="weights"><input type="number" min="1"></td>
+        <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
+        <td class="trash-can"><input type="image" class="trash-pic" src="../images/trash.png" alt="trash.png"></td>
       </tr>
       <tr>
         <td class="weights"><input type="number" min="1"></td>
-        <td><textarea class="assess-description" rows="4" cols="120" maxlength="400"></textarea></td>
-        <td class="trash-can"><img src="../images/trash.png"></td>
+        <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
+        <td class="trash-can"><input type="image" class="trash-pic" src="../images/trash.png" alt="trash.png"></td>
+      </tr>
+      <tr>
+        <td class="weights"><input type="number" min="1"></td>
+        <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
+        <td class="trash-can"><input type="image" class="trash-pic" src="../images/trash.png" alt="trash.png"></td>
+      </tr>
+      <tr>
+        <td class="weights"><input type="number" min="1"></td>
+        <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
+        <td class="trash-can"><input type="image" class="trash-pic" src="../images/trash.png" alt="trash.png"></td>
       </tr>
           </table>
       <br>
       <div class="new-img-button">
-        <img class ="new-button" src="../images/new-button.PNG"></div>
+        <input type="image" class ="new-button" src="../images/new-button.PNG">
+      </div>
+      <div class="save-assessments">
+        <button class="save-assessments-btn">Save Assessments</button>
+      </div>
+      </div><br><br>
+      <hr class="end-results" align="center">
+      <div class="narrative-summary">
+        <h1 class="container-header">Narrative Summary<hr></h1>
+        <div class="main-narratives-description">
+          <p>Please enter your name for each outcome, including the student strengths for the outcome, student
+            weaknesses for the outcomes, and suggested actions for improving student attainment of each outcome.
+            <br><br>
+            <strong class="narrative-separators">Strengths</strong>
+            <br>
+            <textarea class="narratives-text" rows="4" maxlength="2000" placeholder="None"></textarea>
+            <br><br>
+            <strong class="narrative-separators">Weaknesses</strong>
+            <textarea class="narratives-text" rows="4" maxlength="2000" placeholder="None"></textarea>
+            <br><br>
+            <strong class="narrative-separators">Actions</strong>
+            <textarea class="narratives-text" rows="4" maxlength="2000" placeholder="None"></textarea>
+          </p>
+        </div>
+        <div class="save-narratives">
+          <button class="save-narratives-btn">Save Narrative</button>
+        </div>
       </div>
       </main>
     </div>
