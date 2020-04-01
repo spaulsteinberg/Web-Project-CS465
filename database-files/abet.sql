@@ -35,11 +35,13 @@ create table OutcomeResults(
 	major ENUM("CS", "EE", "CpE"),
 	performanceLevel int(1),
 	numberOfStudents int(3),
+	PRIMARY KEY (sectionId, outcomeId, major, performanceLevel),
 	FOREIGN KEY (sectionId) REFERENCES Sections (sectionId),
 	FOREIGN KEY (outcomeId, major) REFERENCES Outcomes (outcomeId, major),
 	FOREIGN KEY (performanceLevel) REFERENCES PerformanceLevels (performanceLevel));
 
 create table Assessments(
+	assessmentId int NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	sectionId int(3),
 	assessmentDescription varchar(100),
 	weight int(3),
@@ -55,6 +57,7 @@ create table Narratives(
 	strengths varchar(200),
 	weaknesses varchar(200),
 	actions varchar(50),
+	PRIMARY KEY (sectionId, major, outcomeId),
 	FOREIGN KEY (sectionId) REFERENCES Sections (sectionId),
 	FOREIGN KEY (outcomeId, major) REFERENCES Outcomes (outcomeId, major));
 

@@ -65,12 +65,11 @@
 
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
-    $query = "UPDATE Narratives
-			  SET strengths=?, weaknesses=?, actions=?
-			  WHERE sectionId=? AND outcomeId=? AND major=?";
+    $query = "INSERT INTO Narratives VALUES(?,?,?,?,?,?)
+			  ON DUPLICATE KEY UPDATE strengths=?, weaknesses=?, actions=?, sectionId=?, outcomeId=?, major=?";
 
 	$stmt = $conn->prepare($query);
-	$stmt->bind_param("sssiis", $strengths, $weaknesses, $actions, $sectionId, $outcomeId, $major);
+	$stmt->bind_param("isissssssiis", $sectionId, $major, $outcomeId, $strengths, $weaknesses, $actions, $strengths, $weaknesses, $actions, $sectionId, $outcomeId, $major);
 
 	if ($stmt->execute()) {
 

@@ -60,20 +60,17 @@
 
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
-    $query = "UPDATE OutcomeResults
-			  SET performanceLevel=?, numberOfStudents=?
-			  WHERE sectionId=? AND outcomeId=? AND major=?";
+    $query = "INSERT INTO OutcomeResults VALUES(?,?,?,?,?)
+			  ON DUPLICATE KEY UPDATE performanceLevel=?, numberOfStudents=?, sectionId=?, outcomeId=?, major=?";
 
 	$stmt = $conn->prepare($query);
-	$stmt->bind_param("iiiis", $performanceLevel, $numberOfStudents, $sectionId, $outcomeId, $major);
+	$stmt->bind_param("iisiiiiiis", $sectionId, $outcomeId, $major, $performanceLevel, $numberOfStudents, $performanceLevel, $numberOfStudents, $sectionId, $outcomeId, $major);
 
 	if ($stmt->execute()) {
-
-
+		$stmt->close();
 	}
 	else {
 		echo json_encode(array('msg' => 'Query failed.'));
 	}
-	$stmt->close();
 	$conn->close();
 ?>
