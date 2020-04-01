@@ -68,7 +68,7 @@
 		while ($stmt->fetch()) {
 			$accepted = true;
 			echo json_encode(array('instructorId' => $instructorId, 'sectionId' => $sectionId,
-								   'courseId' => $courseId, 'major' => $major, 'semester' => $semester, 'year' => $year));
+								   'courseId' => $courseId, 'major' => $major, 'semester' => $semester, 'year' => $year), JSON_PRETTY_PRINT);
 		}
 		if(!$accepted){
 			echo json_encode(array('msg' => 'No results'));
