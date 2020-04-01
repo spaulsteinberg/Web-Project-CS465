@@ -58,9 +58,7 @@
 		$accepted = false;
 		while ($stmt->fetch()) {
 			$accepted = true;
-			/* This is messing up. I believe it is incorrectly encoded...try echo-ing and see that the
-			apostrophe is messing things up */
-			echo json_encode(array('outcomeId' => $outcomeId, 'outcomeDescription' => $outcomeDescription));
+			echo json_encode(array('outcomeId' => $outcomeId, 'outcomeDescription' => $outcomeDescription), JSON_PRETTY_PRINT);
 		}
 		if(!$accepted){
 			echo json_encode(array('msg' => 'No results'));
