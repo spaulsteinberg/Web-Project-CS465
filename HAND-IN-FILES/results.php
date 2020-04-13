@@ -35,24 +35,37 @@
 		if(!in_array($_GET["major"], $approvedMajors)) die (json_encode(array('Error' => 'Invalid or unset major')));
 		$major = $_GET["major"];
 	}
+	if (!isset($_GET["outcomeId"]) || $_GET["outcomeId"] == ''){
+		die (json_encode(array('Error' => 'Must enter a valid outcome ID')));
+	}
+	else {
+		$outcomeId = $_GET["outcomeId"];
+	}
 	$conn = connect(); //set connection
 
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
-    $query = "SELECT O.outcomeId, O.outcomeDescription 
-				FROM Outcomes O JOIN CourseOutcomeMapping R ON O.outcomeId=R.outcomeId AND O.major=R.major
-				JOIN Sections S ON S.courseId=R.courseId
-				WHERE S.sectionId=? AND O.major=?
-				ORDER BY O.outcomeId";
+    $query = "SELECT 
+				p.description, o.numberOfStudents
+			  FROM 
+				PerformanceLevels p, OutcomeResults o 
+			  WHERE 
+				o.outcomeId = ? AND
+				o.major = ? AND
+				o.sectionId = ? AND
+				o.performanceLevel = p.performanceLevel
+			  ORDER BY
+				p.performanceLevel";
+
 	$stmt = $conn->prepare($query);
-	$stmt->bind_param("is", $sectionId, $major); //ss for types of binded params
+	$stmt->bind_param("isi", $outcomeId, $major, $sectionId); //ss for types of binded params
 
 	if ($stmt->execute()) {
-		$stmt->bind_result($outcomeId, $outcomeDescription);
+		$stmt->bind_result($performanceDescription, $numberOfStudents);
 		$accepted = false;
 		while ($stmt->fetch()) {
 			$accepted = true;
-			echo json_encode(array('outcomeId' => $outcomeId, 'outcomeDescription' => $outcomeDescription), JSON_PRETTY_PRINT);
+			echo json_encode(array('performanceDescription' => $performanceDescription, 'numberOfStudents' => $numberOfStudents));
 		}
 		if(!$accepted){
 			echo json_encode(array('msg' => 'No results'));

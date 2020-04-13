@@ -41,7 +41,7 @@
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
     $query = "SELECT O.outcomeId, O.outcomeDescription 
 				FROM Outcomes O JOIN CourseOutcomeMapping R ON O.outcomeId=R.outcomeId AND O.major=R.major
-				JOIN Sections S ON S.courseId=R.courseId
+				JOIN Sections S ON S.courseId=R.courseId AND S.semester=R.semester AND S.year=R.year
 				WHERE S.sectionId=? AND O.major=?
 				ORDER BY O.outcomeId";
 	$stmt = $conn->prepare($query);

@@ -20,11 +20,11 @@
 
 	//check if isset (whether exists or not) or after sanitizing the input is still bad...considers
 	//empty string as true, so also make a check for it.
-	if (!isset($_GET["sectionId"]) || $_GET["sectionId"] == ''){
+	if (!isset($_GET["sectionId"]) || $_GET["sectionId"] == '' || !is_numeric($_GET["sectionId"])){
 		die (json_encode(array('Error' => 'Must enter a section ID')));
 	}
 	else{
-		$sectionId = $_GET["sectionId"];
+		$sectionId = stripslashes(trim($_GET["sectionId"]));
 	}
 	if ((!isset($_GET["major"]) || $_GET["major"] == '')){
 		die (json_encode(array('Error' => 'Invalid or unset major')));
@@ -33,30 +33,40 @@
 	{
 		$approvedMajors = array('CS', 'CpE', 'EE');
 		if(!in_array($_GET["major"], $approvedMajors)) die (json_encode(array('Error' => 'Invalid or unset major')));
-		$major = $_GET["major"];
+		$major = stripslashes(trim($_GET["major"]));
 	}
+	if (!isset($_GET["outcomeId"]) || $_GET["outcomeId"] == '' || !is_numeric($_GET["outcomeId"])){
+		die (json_encode(array('Error' => 'Must enter a valid outcome ID')));
+	}
+	else {
+		$outcomeId = stripslashes(trim($_GET["outcomeId"]));
+	}
+	if (!isset($_GET["performanceLevel"]) || $_GET["performanceLevel"] == ''){
+		die (json_encode(array('Error' => 'Must enter a valid performance level')));
+	}
+	else {
+		$levels = array(1, 2, 3);
+		if(!in_array($_GET["performanceLevel"], $levels)) die (json_encode(array('Error' => 'Invalid or unset performance level')));
+		$performanceLevel = stripslashes(trim($_GET["performanceLevel"]));
+	}
+	if (!isset($_GET["numberOfStudents"]) || $_GET["numberOfStudents"] == '' || !is_numeric($_GET["numberOfStudents"])){
+		die (json_encode(array('Error' => 'Needs a valid number')));
+	}
+	else {
+		$numberOfStudents = stripslashes(trim($_GET["numberOfStudents"]));
+	}
+
 	$conn = connect(); //set connection
 
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
-    $query = "SELECT O.outcomeId, O.outcomeDescription 
-				FROM Outcomes O JOIN CourseOutcomeMapping R ON O.outcomeId=R.outcomeId AND O.major=R.major
-				JOIN Sections S ON S.courseId=R.courseId
-				WHERE S.sectionId=? AND O.major=?
-				ORDER BY O.outcomeId";
+    $query = "INSERT INTO OutcomeResults VALUES(?,?,?,?,?)
+			  ON DUPLICATE KEY UPDATE performanceLevel=?, numberOfStudents=?, sectionId=?, outcomeId=?, major=?";
+
 	$stmt = $conn->prepare($query);
-	$stmt->bind_param("is", $sectionId, $major); //ss for types of binded params
+	$stmt->bind_param("iisiiiiiis", $sectionId, $outcomeId, $major, $performanceLevel, $numberOfStudents, $performanceLevel, $numberOfStudents, $sectionId, $outcomeId, $major);
 
 	if ($stmt->execute()) {
-		$stmt->bind_result($outcomeId, $outcomeDescription);
-		$accepted = false;
-		while ($stmt->fetch()) {
-			$accepted = true;
-			echo json_encode(array('outcomeId' => $outcomeId, 'outcomeDescription' => $outcomeDescription), JSON_PRETTY_PRINT);
-		}
-		if(!$accepted){
-			echo json_encode(array('msg' => 'No results'));
-		}
 		$stmt->close();
 	}
 	else {

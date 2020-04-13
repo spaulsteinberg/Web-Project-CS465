@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="login.css">
+	<meta charset="UTF-8">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+
+<body>
+	<div id="sign-in">
+		Please Sign In
+	</div>
+
+	<form method="POST">
+		<div>
+			<input type="email" id="email" placeholder="E-mail" name="email" required>
+		</div>
+		<div>
+			<input type="password" id="password" placeholder="Password" name="password" required>
+		</div>
+		<div>
+			<input type="submit" id="login" value="login" name="login">
+		</div>
+		<span id="loginFail" name="loginFail"></span>
+	</form>
+	<script>
+		/* On click submit AJAX request and redirect on a 1 returned from PHP, or else display error message */
+		
+	$(document).ready(function(){
+    	$("#login").click(function(e){
+			e.preventDefault();
+			var email = $("#email").val().trim();
+			var password = $("#password").val().trim();
+			$.ajax({
+				url:'login.php',
+				method:'post',
+				data:{email:email,password:password},
+				success:function(response){
+					var msg = "";
+					console.log(response);
+					if(response == 1){
+						console.log("success");
+						$(location).attr('href','abet.html');
+					}else{
+						console.log("failed");
+						msg = "invalid e-mail or password";
+						$("#loginFail").html(msg); //display to the id
+						$("#loginFail").css("color", "red");
+						$("#loginFail").css("font-size", "1em");
+					}
+				},
+				error:function(xhr, ajaxOptions, thrownError){
+					console.log(xhr.status);
+				}
+			});	
+    });
+});
+	</script>
+</body>
+</html>
