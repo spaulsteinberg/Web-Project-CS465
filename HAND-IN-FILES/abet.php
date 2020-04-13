@@ -32,13 +32,13 @@
       </div>
       <div class="outcome-links">
         <hr class="new-hr"> <!-- will need to do these programatically in JS-->
-        <a class="section-outcome" href="abet.html"> <div>Outcome 2</div></a>
+        <a class="section-outcome" href="#"> <div>Outcome 2</div></a>
         <hr class="new-hr">
-        <a class="section-outcome" href="abet.html" > <div>Outcome 3</div> </a>
+        <a class="section-outcome" href="#" > <div>Outcome 3</div> </a>
         <hr class="new-hr">
-        <a class="section-outcome" href="abet.html" > <div>Outcome 4</div> </a>
+        <a class="section-outcome" href="#" > <div>Outcome 4</div> </a>
         <hr class="new-hr">
-        <a class="section-outcome" href="abet.html" > <div>Outcome 5</div> </a>
+        <a class="section-outcome" href="#" > <div>Outcome 5</div> </a>
         <hr class="new-hr">
       </div>
       </nav>
