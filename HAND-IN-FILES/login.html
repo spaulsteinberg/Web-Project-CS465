@@ -39,10 +39,8 @@
 					var msg = "";
 					console.log(response);
 					if(response == 1){
-						console.log("success");
-						$(location).attr('href','abet.html');
+						$(location).attr('href','abet.php');
 					}else{
-						console.log("failed");
 						msg = "invalid e-mail or password";
 						$("#loginFail").html(msg); //display to the id
 						$("#loginFail").css("color", "red");

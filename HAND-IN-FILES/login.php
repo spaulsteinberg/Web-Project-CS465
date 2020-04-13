@@ -68,7 +68,7 @@
 			$accepted = true;
 			$_SESSION['email'] = $userEmail;
 			$_SESSION['instructorId'] = $instructorId;
-			array_push($_SESSION['menuItems'], $menuString); 
+			array_push($_SESSION['menuItems'], $menuString);
 		}
 		if(!$accepted){
 			echo 0;
