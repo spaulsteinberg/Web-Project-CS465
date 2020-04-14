@@ -253,3 +253,32 @@ hr {
     background-color: teal;
     cursor: pointer;
 }
+
+#profile {
+    cursor: pointer;
+}
+
+#userMenu {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    overflow: auto;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    display: none;
+}
+
+#userMenu a {
+    display: block;
+    text-decoration: none;
+    padding-left: 13px;
+    padding-right: 13px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: medium;
+    color: black;
+}
+
+.password-content {
+    display: none;
+}
