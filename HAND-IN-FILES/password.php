@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <head>
     <link rel="stylesheet" type="text/css" href="password.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
     <meta charset="UTF-8">
+    <?php session_start(); ?>
 </head>
 <body>
+    <?php include 'nav.php' ?>
+    <main>
     <h1>Change Password<hr></h1>
     <div class="box box1">
         <div class="header">
@@ -31,4 +35,5 @@
             <input type="submit">
         </div>
     </div>
+    </main> 
 </body>

@@ -1,0 +1,108 @@
+header{
+    justify-content: space-between;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid lightgray;
+    background-color: whitesmoke;
+    height: 7%;
+}
+#container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    flex-grow: 1;
+}
+nav {
+    flex: 0 1 20%;
+    border-right: 1px solid lightgray;
+    background-color: whitesmoke;
+    min-height: 100%;
+}
+#abet {
+    color: gray !important;
+    padding-left: 1%;
+    font-weight: normal;
+    white-space: nowrap;
+}
+.utk-abet {
+	text-decoration: none;
+	color: gray;
+}
+#profile .person {
+    width: 22px;
+    height: 18px;
+    display: inline-flex;
+    position: relative;
+    right: 40%;
+   /* object-fit: cover;*/
+}
+#profile .caret {
+    width: 12px;
+    height: 12px;
+    position: relative;
+    right: 45%;
+    padding-top: 0.5vw;
+}
+.container-section-title {
+    padding-left: 5%;
+    padding-top: 3%;
+}
+
+#profile {
+    cursor: pointer;
+}
+
+#userMenu {
+    z-index: 1;
+    position: absolute;
+    right: 0;
+    overflow: auto;
+    background-color: #f1f1f1;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    display: none;
+}
+
+#userMenu a {
+    display: block;
+    text-decoration: none;
+    padding-left: 13px;
+    padding-right: 13px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: medium;
+    color: black;
+}
+.section-dropdown {
+    padding-left: 5%;
+}
+.course-dropdown {
+  width: 95%;
+  height: 100%;
+  padding: 2% 0 2% 6%;
+  border-radius: 5px;
+  font-size: larger;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+.course-dropdown::-ms-expand {
+  display: none;
+}
+.outcome-links {
+    padding-top: 5%;
+}
+.section-outcome {    
+  text-decoration: none;
+}
+.section-outcome div:hover {
+  background-color: #e8e8e8;
+}
+a div {
+    width: 100%;
+    padding: 5% 0 5% 5%;
+    font-size: large;
+    color: #337ab7;
+}
+.new-hr {
+    border-top: 1px solid lightgray;
+    margin: 0;
+}
