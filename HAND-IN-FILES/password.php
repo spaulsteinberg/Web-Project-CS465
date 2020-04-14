@@ -11,7 +11,7 @@
         </div>
         <div class="nameemail">
             <p><strong>Name: </strong>Placeholder Name</p>
-            <p><strong>Email: </strong><?php $_SESSION['email'] ?></p>
+            <p><strong>Email: </strong><?php echo $_SESSION['email'] ?></p>
         </div>
     </div>
     <div class="box box2">
