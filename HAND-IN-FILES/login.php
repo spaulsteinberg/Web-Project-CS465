@@ -45,7 +45,7 @@
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
     $query = "SELECT 
-				i.instructorId, s.sectionId, s.courseId, c.major, s.semester, s.year
+				i.instructorId, i.firstname, i.lastname, s.sectionId, s.courseId, c.major, s.semester, s.year
 			  FROM 
 				Sections s NATURAL JOIN Instructors i LEFT JOIN CourseOutcomeMapping c ON c.courseId=s.courseId 
 			  WHERE 
@@ -60,7 +60,7 @@
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("ss", $userEmail, $userPassword); //ss for types of binded params
 	if ($stmt->execute()) {
-		$stmt->bind_result($instructorId, $sectionId, $courseId, $major, $semester, $year);
+		$stmt->bind_result($instructorId, $firstname, $lastname, $sectionId, $courseId, $major, $semester, $year);
 		$accepted = false;
 		$_SESSION['menuItems'] = array();
 		$_SESSION['sectionId'] = array();
@@ -73,6 +73,8 @@
 			$accepted = true;
 			$_SESSION['email'] = $userEmail;
 			$_SESSION['instructorId'] = $instructorId;
+			$_SESSION['firstname'] = $firstname;
+			$_SESSION['lastname'] = $lastname;
 			array_push($_SESSION['menuItems'], $menuString);
 			array_push($_SESSION['sectionId'], $sectionId);
 			array_push($_SESSION['major'], $major);
