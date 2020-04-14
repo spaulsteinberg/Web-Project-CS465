@@ -3,6 +3,7 @@
     <head>
       <title>ABET Website</title>
       <link rel="stylesheet" type="text/css" href="abet.css">
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
       <meta charset="UTF-8">
 	  <?php session_start(); ?>
     </head>
@@ -20,26 +21,20 @@
       <nav class="nav-container">
         <h1 class="container-section-title">Section:</h1>
         <div class="section-dropdown">
-          <select class="course-dropdown" size="1">
+		<form method="GET">
+          <select id="class-dropdown" class="course-dropdown" size="1">
 			<?php
-				foreach($_SESSION['menuItems'] as $item){
+				for($x=0; $x < count($_SESSION['menuItems']); $x++){
 			?>
-            <option value="<?php echo $item; ?>"><?php echo $item;?></option>
+            <option value="<?php echo $_SESSION['major'][$x] . " " .$_SESSION['sectionId'][$x]; ?>"><?php echo $_SESSION['menuItems'][$x]?></option>
             <?php
 				}
 			?>
           </select>
+		</form>
       </div>
       <div class="outcome-links">
-        <hr class="new-hr"> <!-- will need to do these programatically in JS-->
-        <a class="section-outcome" href="#"> <div>Outcome 2</div></a>
-        <hr class="new-hr">
-        <a class="section-outcome" href="#" > <div>Outcome 3</div> </a>
-        <hr class="new-hr">
-        <a class="section-outcome" href="#" > <div>Outcome 4</div> </a>
-        <hr class="new-hr">
-        <a class="section-outcome" href="#" > <div>Outcome 5</div> </a>
-        <hr class="new-hr">
+		<hr class="new-hr">
       </div>
       </nav>
       <main class="main-container">
@@ -147,5 +142,60 @@
       </div>
       </main>
     </div>
+	<script>
+	/* This function is on initial load and takes care of first nav dropdown */
+	$(function(){
+		var selectedCourse = $("#class-dropdown").val().split(" ");
+		$.ajax({
+			url: 'outcomes.php',
+			method: 'get',
+			dataType: 'JSON',
+			data: {sectionId: selectedCourse[1], major: selectedCourse[0]},
+			success:function(response){
+				var links = $(".outcome-links");
+				for (var i = 0; i < response.length; i++){
+					var outcomeId = response[i]["outcomeId"];
+					var outcomeDescription = response[i]["outcomeDescription"];
+					var a = "<a class='section-outcome' href='#'><div>" + "Outcome " + outcomeId + "</div></a><hr class='new-hr'>";
+					links.append(a);
+				}
+			},
+			error:function(xhr, ajaxOptions, thrownError){
+				console.log("failure");
+				console.log(xhr.responseText);
+				console.log(thrownError);
+			}
+
+		});
+	});
+	/* On dropdown change, empty old links and put new ones in */
+	$(function(){
+		$("#class-dropdown").change(function(){
+			var selectedCourse = $(this).val().split(" ");
+			$.ajax({
+				url: 'outcomes.php',
+				method: 'get',
+				dataType: 'JSON',
+				data: {sectionId: selectedCourse[1], major: selectedCourse[0]},
+				success:function(response){
+					var $links = $(".outcome-links");
+					$links.empty();					
+					for (var i = 0; i < response.length; i++){
+						var outcomeId = response[i]["outcomeId"];
+						var outcomeDescription = response[i]["outcomeDescription"];
+						var a = "<a class='section-outcome' href='#'><div>" + "Outcome " + outcomeId + "</div></a><hr class='new-hr'>";
+						$links.append(a);
+					}
+				},
+				error:function(xhr, ajaxOptions, thrownError){
+					console.log("failure");
+					console.log(xhr.responseText);
+					console.log(thrownError);
+				}
+
+			});
+		});
+	});
+	</script>
   </body>
 </html>

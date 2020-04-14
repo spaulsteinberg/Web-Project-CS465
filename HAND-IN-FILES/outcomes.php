@@ -17,7 +17,6 @@
 
 	error_reporting(E_ALL); //report errors
 	ini_set('display_errors', 1); //set display error mode
-
 	//check if isset (whether exists or not) or after sanitizing the input is still bad...considers
 	//empty string as true, so also make a check for it.
 	if (!isset($_GET["sectionId"]) || $_GET["sectionId"] == ''){
@@ -41,26 +40,29 @@
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
     $query = "SELECT O.outcomeId, O.outcomeDescription 
 				FROM Outcomes O JOIN CourseOutcomeMapping R ON O.outcomeId=R.outcomeId AND O.major=R.major
-				JOIN Sections S ON S.courseId=R.courseId AND S.semester=R.semester AND S.year=R.year
+				JOIN Sections S ON S.courseId=R.courseId AND S.semester = R.semester AND S.year = R.year
 				WHERE S.sectionId=? AND O.major=?
 				ORDER BY O.outcomeId";
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("is", $sectionId, $major); //ss for types of binded params
-
+	$retArray = array();	
 	if ($stmt->execute()) {
 		$stmt->bind_result($outcomeId, $outcomeDescription);
 		$accepted = false;
 		while ($stmt->fetch()) {
 			$accepted = true;
-			echo json_encode(array('outcomeId' => $outcomeId, 'outcomeDescription' => $outcomeDescription), JSON_PRETTY_PRINT);
+			array_push($retArray, array('outcomeId' => $outcomeId, 'outcomeDescription' => $outcomeDescription));
 		}
 		if(!$accepted){
-			echo json_encode(array('msg' => 'No results'));
+			echo -1;
+		}
+		else {
+			echo json_encode($retArray);
 		}
 		$stmt->close();
 	}
 	else {
-		echo json_encode(array('msg' => 'Query failed.'));
+		echo -1;
 	}
 	$conn->close();
 ?>
