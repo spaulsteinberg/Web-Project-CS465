@@ -10,7 +10,7 @@
             Basic Info
         </div>
         <div class="nameemail">
-            <p><strong>Name: </strong>Placeholder Name</p>
+            <p><strong>Name: </strong><?php echo $_SESSION['firstname'] . " " . $_SESSION['lastname'] ?></p>
             <p><strong>Email: </strong><?php echo $_SESSION['email'] ?></p>
         </div>
     </div>
