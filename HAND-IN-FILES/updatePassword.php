@@ -25,23 +25,23 @@
 	ini_set('display_errors', 1); //set display error mode
 
 	$conn = connect(); //set connection
-	if (!isset($_GET["email"]) || $_GET["email"] == ''){
+	if (!isset($_POST["email"]) || $_POST["email"] == ''){
 		die (json_encode(array('Error' => 'Invalid or empty email')));
 	}
 	else {
-		$userEmail = sanitize_input($_GET["email"]);
+		$userEmail = sanitize_input($_POST["email"]);
 		$userEmail = mysqli_real_escape_string($conn, $userEmail);
 		if (!filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
 			die (json_encode(array('Error' => 'Invalid email')));
 		  }
 	}
-	if (!isset($_GET["password"]) || sanitize_input($_GET["password"]) == ''){
+	if (!isset($_POST["password"]) || sanitize_input($_POST["password"]) == ''){
 		die (json_encode(array('Error' => 'Invalid password input')));
 	}
 	else {
-		$userPassword = sanitize_input($_GET["password"]);
+		$userPassword = sanitize_input($_POST["password"]);
 	}
-	echo "Email is: " . $userEmail . " Password is: " . $userPassword;
+	//echo "Email is: " . $userEmail . " Password is: " . $userPassword;
     $query = "UPDATE Instructors
 			  SET password=PASSWORD(?)
 			  WHERE email=?";
@@ -50,9 +50,10 @@
 	$stmt->bind_param("ss", $userPassword, $userEmail); //ss for types of binded params
 	if ($stmt->execute()) {
 		$stmt->close();
+		echo "success";
 	}
 	else {
-		echo json_encode(array('msg' => 'Query failed.'));
+		die(json_encode(array('msg' => 'Query failed.')));
 	}
 	$conn->close();
 ?>
