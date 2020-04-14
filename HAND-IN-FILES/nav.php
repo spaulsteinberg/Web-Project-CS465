@@ -108,7 +108,9 @@
             });
 
             $("#logout").click(function(){
-                $(location).attr('href',"login.html");
+                $.post('logout.php', {}, function(){
+                    $(location).attr('href',"login.html");
+                });
             });
 
             $("#changePassword").click(function(){
