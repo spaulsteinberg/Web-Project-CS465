@@ -63,12 +63,22 @@
 		$stmt->bind_result($instructorId, $sectionId, $courseId, $major, $semester, $year);
 		$accepted = false;
 		$_SESSION['menuItems'] = array();
+		$_SESSION['sectionId'] = array();
+		$_SESSION['major'] = array();
+		$_SESSION['courseId'] = array();
+		$_SESSION['semester'] = array();
+		$_SESSION['year'] = array();
 		while ($stmt->fetch()) {
 			$menuString = $courseId . " " . $semester . " " . $year . " " . $major;
 			$accepted = true;
 			$_SESSION['email'] = $userEmail;
 			$_SESSION['instructorId'] = $instructorId;
 			array_push($_SESSION['menuItems'], $menuString);
+			array_push($_SESSION['sectionId'], $sectionId);
+			array_push($_SESSION['major'], $major);
+			array_push($_SESSION['courseId'], $courseId);
+			array_push($_SESSION['semester'], $semester);
+			array_push($_SESSION['year'], $year);
 		}
 		if(!$accepted){
 			echo 0;
