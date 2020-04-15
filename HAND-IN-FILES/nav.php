@@ -44,6 +44,14 @@
 
     </body>
     <script>
+    var selectedSection = '<?php echo $_SESSION['selectedSection'];?>';
+    var selectedMajor = '<?php echo $_SESSION['selectedMajor'];?>';
+    console.log(selectedSection + selectedMajor);
+    $(document).ready(function(){
+        if(selectedSection && selectedMajor){
+            $('#class-dropdown').val(selectedMajor + ' ' + selectedSection);
+        }
+    })
 	/* This function is on initial load and takes care of first nav dropdown */
 	$(function(){
         var selectedCourse = $("#class-dropdown").val().split(" ");
@@ -161,5 +169,22 @@
                 }*/
             });
         });
+
+    $(document).ready(function(){
+        $('#class-dropdown').on('change', function() {
+            var selection = this.value;
+            var sMajor = selection.split(" ")[0];
+            var sSection = selection.split(" ")[1];
+            console.log(sSection + " " + sMajor);
+            $.post('rememberDropdown.php', {
+                selectedSection: sSection,
+                selectedMajor: sMajor
+            },
+            function(data, status){
+                console.log(status);
+                console.log(data);
+            });
+        });
+    });
 	</script>
 </html>
