@@ -49,7 +49,8 @@
         var selectedCourse = $("#class-dropdown").val().split(" ");
         console.log(selectedCourse[0] + " " + selectedCourse[1]);
 		var ids = new Array();
-		var descriptions = new Array();
+        var descriptions = new Array();
+        var firstOutcome;
 		$.ajax({
 			url: 'outcomes.php',
 			method: 'get',
@@ -73,7 +74,10 @@
 				//var firstLink = $(".outcome-links a:eq(0)");
 				//$(location).attr('href', firstLink);
 				var description = $("#embedded-description");
-				var getOutcome = window.location.href.slice(-1);
+                var getOutcome = window.location.href.slice(-1);
+                if(isNaN(getOutcome)){
+                    getOutcome = ids[0];
+                }
 				for (var x = 0; x < ids.length; x++){
 					if (ids[x] == getOutcome){
 						var str = "<strong>Outcome " + getOutcome + " - " + selectedCourse[0] +  ": </strong>" + descriptions[x];
