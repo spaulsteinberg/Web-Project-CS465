@@ -47,22 +47,38 @@
 	/* This function is on initial load and takes care of first nav dropdown */
 	$(function(){
         var selectedCourse = $("#class-dropdown").val().split(" ");
+        console.log(selectedCourse[0] + " " + selectedCourse[1]);
+		var ids = new Array();
+		var descriptions = new Array();
 		$.ajax({
 			url: 'outcomes.php',
 			method: 'get',
 			dataType: 'JSON',
 			data: {sectionId: selectedCourse[1], major: selectedCourse[0]},
 			success:function(response){
+                console.log("success response");
 				var links = $(".outcome-links");
 				for (var i = 0; i < response.length; i++){
 					var outcomeId = response[i]["outcomeId"];
+					ids[i] = outcomeId;
 					var outcomeDescription = response[i]["outcomeDescription"];
+					descriptions[i] = outcomeDescription;
 					var referenceString = "abet.php?outcome=" + outcomeId;
 					var anchorId = "outcomeRef-" + outcomeId + "sectionRef-" + selectedCourse[1] + "majorRef-" + selectedCourse[0];
 					//need to give these dynamic, unique ID's and query strings -- see referenceString and anchorId
 					var a = "<a class='section-outcome' id='"+anchorId+"'><div>" + "Outcome " + outcomeId + "</div></a><hr class='new-hr'>";
 					links.append(a);
 					$("#" + anchorId).attr('href', referenceString);
+				}
+				//var firstLink = $(".outcome-links a:eq(0)");
+				//$(location).attr('href', firstLink);
+				var description = $("#embedded-description");
+				var getOutcome = window.location.href.slice(-1);
+				for (var x = 0; x < ids.length; x++){
+					if (ids[x] == getOutcome){
+						var str = "<strong>Outcome " + getOutcome + " - " + selectedCourse[0] +  ": </strong>" + descriptions[x];
+						description.html(str);
+					}
 				}
 			},
 			error:function(xhr, ajaxOptions, thrownError){
@@ -78,6 +94,8 @@
 		$("#class-dropdown").change(function(e){
 			e.preventDefault();
 			var selectedCourse = $(this).val().split(" ");
+			var ids = new Array();
+			var descriptions = new Array();
 			$.ajax({
 				url: 'outcomes.php',
 				method: 'get',
@@ -89,12 +107,22 @@
 					links.append("<hr class='new-hr'>")
 					for (var i = 0; i < response.length; i++){
 						var outcomeId = response[i]["outcomeId"];
+						ids[i] = outcomeId;
 						var outcomeDescription = response[i]["outcomeDescription"];
+						descriptions[i] = outcomeDescription;
 						var referenceString = "abet.php?outcome=" + outcomeId;
 						var anchorId = "outcomeRef-" + outcomeId + "sectionRef-" + selectedCourse[1] + "majorRef-" + selectedCourse[0];
 						var a = "<a class='section-outcome' id='"+anchorId+"'><div>" + "Outcome " + outcomeId + "</div></a><hr class='new-hr'>";
 						links.append(a);
 						$("#" + anchorId).attr('href', referenceString);
+					}	
+					var description = $("#embedded-description");
+					var getOutcome = window.location.href.slice(-1);
+					for (var x = 0; x < ids.length; x++){
+						if (ids[x] == getOutcome){
+							var str = "<strong>Outcome " + getOutcome + " - " + selectedCourse[0] +  ": </strong>" + descriptions[x];
+							description.html(str);
+						}
 					}
 				},
 				error:function(xhr, ajaxOptions, thrownError){
@@ -104,6 +132,7 @@
 				}
 
 			});
+
 		});
     });
     /*password and stuff */
@@ -117,9 +146,7 @@
             });
 
             $("#logout").click(function(){
-                $.post('logout.php', {}, function(){
-                    $(location).attr('href',"login.html");
-                });
+                $(location).attr('href',"login.html");
             });
 
             $("#changePassword").click(function(){
