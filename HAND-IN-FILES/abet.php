@@ -19,8 +19,8 @@
               </p>
             </div>
             <div class="outcome-description">
-              <p id="embedded-description"> <strong>Outcome 2 - CS: </strong>Design, implement, and evaluate a computing-based
-              solution to meet a given set of computing requirements in the context of the programs discipline.</p>
+              <p id="embedded-description"> <!-- <strong>Outcome 2 - CS: </strong>Design, implement, and evaluate a computing-based
+              solution to meet a given set of computing requirements in the context of the programs discipline. --> </p>
             </div>
             <br>
             <table class="expectation-table">
