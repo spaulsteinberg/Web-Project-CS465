@@ -24,7 +24,7 @@ nav {
     font-weight: normal;
     white-space: nowrap;
 }
-.utk-abet {
+.utk-abet, a:visited {
 	text-decoration: none;
 	color: gray;
 }
@@ -93,7 +93,7 @@ nav {
 .section-outcome {    
   text-decoration: none;
 }
-.section-outcome div:hover {
+.section-outcome div:hover{
   background-color: #e8e8e8;
 }
 a div {
