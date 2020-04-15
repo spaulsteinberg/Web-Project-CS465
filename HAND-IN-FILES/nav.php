@@ -26,11 +26,11 @@
                 <h1 class="container-section-title">Section:</h1>
                 <div class="section-dropdown">
                 <form method="GET">
-                <select id="class-dropdown" class="course-dropdown" size="1">
+                <select id="sectionMenu" class="course-dropdown" size="1">
                     <?php
                         for($x=0; $x < count($_SESSION['menuItems']); $x++){
                     ?>
-                    <option value="<?php echo $_SESSION['major'][$x] . " " .$_SESSION['sectionId'][$x]; ?>"><?php echo $_SESSION['menuItems'][$x]?></option>
+                    <option id="section<?php echo $x+1;?>" value="<?php echo $_SESSION['major'][$x] . " " .$_SESSION['sectionId'][$x]; ?>"><?php echo $_SESSION['menuItems'][$x]?></option>
                     <?php
                         }
                     ?>
@@ -49,12 +49,12 @@
     console.log(selectedSection + selectedMajor);
     $(document).ready(function(){
         if(selectedSection && selectedMajor){
-            $('#class-dropdown').val(selectedMajor + ' ' + selectedSection);
+            $('#sectionMenu').val(selectedMajor + ' ' + selectedSection);
         }
     })
 	/* This function is on initial load and takes care of first nav dropdown */
 	$(function(){
-        var selectedCourse = $("#class-dropdown").val().split(" ");
+        var selectedCourse = $("#sectionMenu").val().split(" ");
         console.log(selectedCourse[0] + " " + selectedCourse[1]);
 		var ids = new Array();
         var descriptions = new Array();
@@ -103,7 +103,7 @@
 	});
 	/* On dropdown change, empty old links and put new ones in */
 	$(function(){
-		$("#class-dropdown").change(function(e){
+		$("#sectionMenu").change(function(e){
 			e.preventDefault();
 			var selectedCourse = $(this).val().split(" ");
 			var ids = new Array();
@@ -171,7 +171,7 @@
         });
 
     $(document).ready(function(){
-        $('#class-dropdown').on('change', function() {
+        $('#sectionMenu').on('change', function() {
             var selection = this.value;
             var sMajor = selection.split(" ")[0];
             var sSection = selection.split(" ")[1];
