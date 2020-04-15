@@ -47,14 +47,12 @@
 	/* This function is on initial load and takes care of first nav dropdown */
 	$(function(){
         var selectedCourse = $("#class-dropdown").val().split(" ");
-        console.log(selectedCourse[0] + " " + selectedCourse[1]);
 		$.ajax({
 			url: 'outcomes.php',
 			method: 'get',
 			dataType: 'JSON',
 			data: {sectionId: selectedCourse[1], major: selectedCourse[0]},
 			success:function(response){
-                console.log("success response");
 				var links = $(".outcome-links");
 				for (var i = 0; i < response.length; i++){
 					var outcomeId = response[i]["outcomeId"];
@@ -119,7 +117,9 @@
             });
 
             $("#logout").click(function(){
-                $(location).attr('href',"login.html");
+                $.post('logout.php', {}, function(){
+                    $(location).attr('href',"login.html");
+                });
             });
 
             $("#changePassword").click(function(){
