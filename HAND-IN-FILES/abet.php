@@ -165,6 +165,51 @@
 			getResults();
 		});
 	});
+	/* on save go through each and make ajax calls for each performance level. update html as well */
+	$(".save-results-btn").click(function(e){
+		e.preventDefault();
+		var selectedCourse = $("#sectionMenu").val().split(" ");
+		var major = selectedCourse[0];
+		var section = selectedCourse[1];
+		var outcome = window.location.href.slice(-1);
+		var exceeds = parseInt($("#exceeds").val(), 10); //might not be setting value and will need args
+		var meets = parseInt($("#meets").val(), 10);
+		var notMeets = parseInt($("#not-meets").val(), 10);
+		var total = exceeds + meets + notMeets;
+		console.log("total: " + total);
+		var numberOfStudents = [exceeds, meets, notMeets];
+		var performanceLevels = [3, 2, 1];
+		for (var i = 0; i < performanceLevels.length; i++){
+			$.ajax({
+				url: 'updateResults.php',
+				method: 'post',
+				data: {
+						sectionId: section,
+						major: major,
+						outcomeId: outcome,
+						performanceLevel: performanceLevels[i],
+						numberOfStudents: numberOfStudents[i]
+				},
+				success:function(response){
+					if (response == 1){
+						console.log("update success");
+					}
+					else{
+						console.log("sum went rong bruh: " + response);
+					}
+				},
+				error:function(xhr, ajaxOptions, thrownError){
+					console.log("update failure");
+					console.log(thrownError);
+				}
+
+			});	
+		}
+		$("#exceeds").val(exceeds);
+		$("#meets").val(meets);
+		$("#not-meets").val(notMeets);
+		$("#total").html(total);
+	});
 	</script>
   </body>
 </html>

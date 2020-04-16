@@ -20,40 +20,40 @@
 
 	//check if isset (whether exists or not) or after sanitizing the input is still bad...considers
 	//empty string as true, so also make a check for it.
-	if (!isset($_GET["sectionId"]) || $_GET["sectionId"] == '' || !is_numeric($_GET["sectionId"])){
+	if (!isset($_POST["sectionId"]) || $_POST["sectionId"] == '' || !is_numeric($_POST["sectionId"])){
 		die (json_encode(array('Error' => 'Must enter a section ID')));
 	}
 	else{
-		$sectionId = stripslashes(trim($_GET["sectionId"]));
+		$sectionId = stripslashes(trim($_POST["sectionId"]));
 	}
-	if ((!isset($_GET["major"]) || $_GET["major"] == '')){
+	if ((!isset($_POST["major"]) || $_POST["major"] == '')){
 		die (json_encode(array('Error' => 'Invalid or unset major')));
 	}
 	else
 	{
 		$approvedMajors = array('CS', 'CpE', 'EE');
-		if(!in_array($_GET["major"], $approvedMajors)) die (json_encode(array('Error' => 'Invalid or unset major')));
-		$major = stripslashes(trim($_GET["major"]));
+		if(!in_array($_POST["major"], $approvedMajors)) die (json_encode(array('Error' => 'Invalid or unset major')));
+		$major = stripslashes(trim($_POST["major"]));
 	}
-	if (!isset($_GET["outcomeId"]) || $_GET["outcomeId"] == '' || !is_numeric($_GET["outcomeId"])){
+	if (!isset($_POST["outcomeId"]) || $_POST["outcomeId"] == '' || !is_numeric($_POST["outcomeId"])){
 		die (json_encode(array('Error' => 'Must enter a valid outcome ID')));
 	}
 	else {
-		$outcomeId = stripslashes(trim($_GET["outcomeId"]));
+		$outcomeId = stripslashes(trim($_POST["outcomeId"]));
 	}
-	if (!isset($_GET["performanceLevel"]) || $_GET["performanceLevel"] == ''){
+	if (!isset($_POST["performanceLevel"]) || $_POST["performanceLevel"] == ''){
 		die (json_encode(array('Error' => 'Must enter a valid performance level')));
 	}
 	else {
 		$levels = array(1, 2, 3);
-		if(!in_array($_GET["performanceLevel"], $levels)) die (json_encode(array('Error' => 'Invalid or unset performance level')));
-		$performanceLevel = stripslashes(trim($_GET["performanceLevel"]));
+		if(!in_array($_POST["performanceLevel"], $levels)) die (json_encode(array('Error' => 'Invalid or unset performance level')));
+		$performanceLevel = stripslashes(trim($_POST["performanceLevel"]));
 	}
-	if (!isset($_GET["numberOfStudents"]) || $_GET["numberOfStudents"] == '' || !is_numeric($_GET["numberOfStudents"])){
+	if (!isset($_POST["numberOfStudents"]) || $_POST["numberOfStudents"] == '' || !is_numeric($_POST["numberOfStudents"])){
 		die (json_encode(array('Error' => 'Needs a valid number')));
 	}
 	else {
-		$numberOfStudents = stripslashes(trim($_GET["numberOfStudents"]));
+		$numberOfStudents = stripslashes(trim($_POST["numberOfStudents"]));
 	}
 
 	$conn = connect(); //set connection
@@ -67,10 +67,11 @@
 	$stmt->bind_param("iisiiiiiis", $sectionId, $outcomeId, $major, $performanceLevel, $numberOfStudents, $performanceLevel, $numberOfStudents, $sectionId, $outcomeId, $major);
 
 	if ($stmt->execute()) {
+		echo 1;
 		$stmt->close();
 	}
 	else {
-		echo json_encode(array('msg' => 'Query failed.'));
+		echo 0;
 	}
 	$conn->close();
 ?>
