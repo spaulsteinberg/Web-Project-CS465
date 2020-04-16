@@ -172,9 +172,13 @@
 		var major = selectedCourse[0];
 		var section = selectedCourse[1];
 		var outcome = window.location.href.slice(-1);
-		var exceeds = parseInt($("#exceeds").val(), 10); //might not be setting value and will need args
-		var meets = parseInt($("#meets").val(), 10);
-		var notMeets = parseInt($("#not-meets").val(), 10);
+		var exceeds; var meets; var notMeets;
+		if ($("#exceeds").val() == '') exceeds = 0;
+		else exceeds = parseInt($("#exceeds").val(), 10);
+		if ($("#meets").val() == '') meets = 0;
+		else meets = parseInt($("#meets").val(), 10);
+		if ($("#not-meets").val() == '') notMeets = 0;
+		else notMeets = parseInt($("#not-meets").val(), 10);
 		var total = exceeds + meets + notMeets;
 		console.log("total: " + total);
 		var numberOfStudents = [exceeds, meets, notMeets];
