@@ -168,7 +168,10 @@
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
 		var section = selectedCourse[1];
-		var outcome = window.location.href.slice(-1);
+    var outcome = window.location.href.slice(-1);
+    if(isNaN(outcome)){
+      outcome = initids[0];
+    }
 		var exceeds; var meets; var notMeets;
 		if ($("#exceeds").val() == '') exceeds = 0;
 		else exceeds = parseInt($("#exceeds").val(), 10);
