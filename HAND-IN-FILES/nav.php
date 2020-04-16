@@ -104,7 +104,7 @@
         });
 	});
 	/* On dropdown change, empty old links and put new ones in */
-	$(function(){
+	/*$(function(){
 		$("#sectionMenu").change(function(e){
 			e.preventDefault();
 			var selectedCourse = $(this).val().split(" ");
@@ -149,7 +149,7 @@
 			});
 
 		});
-    });
+    });*/
     /*password and stuff */
     $(document).ready(function(){
             $("#profile").click(function(){
@@ -189,6 +189,7 @@
             function(data, status){
                 console.log(status);
                 console.log(data);
+                $(location).attr('href', 'abet.php');
             });
         });
     });
