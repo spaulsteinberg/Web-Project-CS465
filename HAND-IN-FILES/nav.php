@@ -130,8 +130,9 @@
 						links.append(a);
 						$("#" + anchorId).attr('href', referenceString);
 					}	
-					var description = $("#embedded-description");
-					var getOutcome = window.location.href.slice(-1);
+                    var description = $("#embedded-description");
+                    //on dropdown change, i think it makes more sense to go back to first outcome
+					var getOutcome = ids[0];
 					for (var x = 0; x < ids.length; x++){
 						if (ids[x] == getOutcome){
 							var str = "<strong>Outcome " + getOutcome + " - " + selectedCourse[0] +  ": </strong>" + descriptions[x];
