@@ -17,7 +17,6 @@
 
 	error_reporting(E_ALL); //report errors
 	ini_set('display_errors', 1); //set display error mode
-
 	//check if isset (whether exists or not) or after sanitizing the input is still bad...considers
 	//empty string as true, so also make a check for it.
 	if (!isset($_GET["sectionId"]) || $_GET["sectionId"] == ''){
@@ -59,21 +58,24 @@
 
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("isi", $outcomeId, $major, $sectionId); //ss for types of binded params
-
+	$retArray = array();
 	if ($stmt->execute()) {
 		$stmt->bind_result($performanceDescription, $numberOfStudents);
 		$accepted = false;
 		while ($stmt->fetch()) {
 			$accepted = true;
-			echo json_encode(array('performanceDescription' => $performanceDescription, 'numberOfStudents' => $numberOfStudents));
+			array_push($retArray, array('performanceDescription' => $performanceDescription, 'numberOfStudents' => $numberOfStudents));
 		}
 		if(!$accepted){
-			echo json_encode(array('msg' => 'No results'));
+			echo 0;
+		}
+		else {
+			echo json_encode($retArray);	
 		}
 		$stmt->close();
 	}
 	else {
-		echo json_encode(array('msg' => 'Query failed.'));
+		echo 0;
 	}
 	$conn->close();
 ?>

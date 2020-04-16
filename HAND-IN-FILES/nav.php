@@ -65,7 +65,6 @@
 			dataType: 'JSON',
 			data: {sectionId: selectedCourse[1], major: selectedCourse[0]},
 			success:function(response){
-                console.log("success response");
 				var links = $(".outcome-links");
 				for (var i = 0; i < response.length; i++){
 					var outcomeId = response[i]["outcomeId"];
@@ -75,7 +74,7 @@
 					var referenceString = "abet.php?outcome=" + outcomeId;
 					var anchorId = "outcomeRef-" + outcomeId + "sectionRef-" + selectedCourse[1] + "majorRef-" + selectedCourse[0];
 					//need to give these dynamic, unique ID's and query strings -- see referenceString and anchorId
-					var a = "<a class='section-outcome' id='"+anchorId+"'><div>" + "Outcome " + outcomeId + "</div></a><hr class='new-hr'>";
+					var a = "<a class='section-outcome' id='"+anchorId+"'><div id='"+outcomeId+"'>" + "Outcome <span class='outId'>" + outcomeId + "</span></div></a><hr class='new-hr'>";
 					links.append(a);
 					$("#" + anchorId).attr('href', referenceString);
 				}
@@ -124,7 +123,7 @@
 						descriptions[i] = outcomeDescription;
 						var referenceString = "abet.php?outcome=" + outcomeId;
 						var anchorId = "outcomeRef-" + outcomeId + "sectionRef-" + selectedCourse[1] + "majorRef-" + selectedCourse[0];
-						var a = "<a class='section-outcome' id='"+anchorId+"'><div>" + "Outcome " + outcomeId + "</div></a><hr class='new-hr'>";
+						var a = "<a class='section-outcome' id='"+anchorId+"'><div id='"+outcomeId+"'>" + "Outcome <span class='outId'>" + outcomeId + "</span></div></a><hr class='new-hr'>";
 						links.append(a);
 						$("#" + anchorId).attr('href', referenceString);
 					}	
@@ -172,7 +171,8 @@
 
     $(document).ready(function(){
         $('#sectionMenu').on('change', function() {
-            var selection = this.value;
+            console.log("changing");
+			var selection = this.value;
             var sMajor = selection.split(" ")[0];
             var sSection = selection.split(" ")[1];
             console.log(sSection + " " + sMajor);
