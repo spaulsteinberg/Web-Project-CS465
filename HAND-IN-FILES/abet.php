@@ -41,7 +41,8 @@
             <div class="save-results">
                 <button class="save-results-btn">Save Results</button>
             </div>
-            <br><br><br><br>
+			<div id="inner-save"><p class="success-or-err-msg"></p></div>
+           <br><br><br>
             <hr class="end-results" align="center">
           </div>
           <div class="assessments">
@@ -139,10 +140,11 @@
 					$("#not-meets").val('');
 					$("#meets").val('');
 					$("#exceeds").val('');
-					$("#not-meets").attr('placeholder', 0);
+					$("#total").html('');
+				/*	$("#not-meets").attr('placeholder', 0);
 					$("#meets").attr('placeholder', 0);
 					$("#exceeds").attr('placeholder', 0);
-					$("#total").html(0);
+					$("#total").html(0);*/
 				}
 				else {
 					$("#not-meets").val(response[0]["numberOfStudents"]);
@@ -183,6 +185,7 @@
 		console.log("total: " + total);
 		var numberOfStudents = [exceeds, meets, notMeets];
 		var performanceLevels = [3, 2, 1];
+		var success = true;
 		for (var i = 0; i < performanceLevels.length; i++){
 			$.ajax({
 				url: 'updateResults.php',
@@ -196,23 +199,36 @@
 				},
 				success:function(response){
 					if (response == 1){
+						success = true;
 						console.log("update success");
 					}
 					else{
+						success = false;
 						console.log("sum went rong bruh: " + response);
 					}
 				},
 				error:function(xhr, ajaxOptions, thrownError){
 					console.log("update failure");
 					console.log(thrownError);
+					success = false;
 				}
 
 			});	
 		}
-		$("#exceeds").val(exceeds);
-		$("#meets").val(meets);
-		$("#not-meets").val(notMeets);
-		$("#total").html(total);
+		if (success){
+			$(".success-or-err-msg").html("Results successfully saved");
+			$(".success-or-err-msg").css("color", "green");
+			$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+			$("#exceeds").val(exceeds);
+			$("#meets").val(meets);
+			$("#not-meets").val(notMeets);
+			$("#total").html(total);
+		}
+		else {
+			$(".success-or-err-msg").html("Results unsuccessfully saved");
+			$(".success-or-err-msg").css("color", "red");
+			$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		}
 	});
 	</script>
   </body>
