@@ -125,7 +125,7 @@
 		var outcome = window.location.href.slice(-1);
 		if (isNaN(outcome)){
 			console.log("div is: " + $("#embedded-description").html());
-			var outcome = 1;
+      outcome = initids[0];
 		}
 		console.log("Major: " + major + " " + "section: " + section + " outcome: " + outcome);
 		$.ajax({
@@ -157,9 +157,6 @@
 			}
 		});
 	}
-	$(function(){
-		getResults();
-	});
 	$(function(){
 		$("#sectionMenu").change(function(e){
 			getResults();

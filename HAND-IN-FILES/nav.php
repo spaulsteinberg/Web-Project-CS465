@@ -44,6 +44,7 @@
 
     </body>
     <script>
+    var initids = new Array();
     var selectedSection = '<?php echo $_SESSION['selectedSection'];?>';
     var selectedMajor = '<?php echo $_SESSION['selectedMajor'];?>';
     console.log(selectedSection + selectedMajor);
@@ -56,7 +57,6 @@
 	$(function(){
         var selectedCourse = $("#sectionMenu").val().split(" ");
         console.log(selectedCourse[0] + " " + selectedCourse[1]);
-		var ids = new Array();
         var descriptions = new Array();
         var firstOutcome;
 		$.ajax({
@@ -68,7 +68,7 @@
 				var links = $(".outcome-links");
 				for (var i = 0; i < response.length; i++){
 					var outcomeId = response[i]["outcomeId"];
-					ids[i] = outcomeId;
+					initids[i] = outcomeId;
 					var outcomeDescription = response[i]["outcomeDescription"];
 					descriptions[i] = outcomeDescription;
 					var referenceString = "abet.php?outcome=" + outcomeId;
@@ -83,10 +83,10 @@
 				var description = $("#embedded-description");
                 var getOutcome = window.location.href.slice(-1);
                 if(isNaN(getOutcome)){
-                    getOutcome = ids[0];
+                    getOutcome = initids[0];
                 }
-				for (var x = 0; x < ids.length; x++){
-					if (ids[x] == getOutcome){
+				for (var x = 0; x < initids.length; x++){
+					if (initids[x] == getOutcome){
 						var str = "<strong>Outcome " + getOutcome + " - " + selectedCourse[0] +  ": </strong>" + descriptions[x];
 						description.html(str);
 					}
@@ -96,9 +96,12 @@
 				console.log("failure");
 				console.log(xhr.responseText);
 				console.log(thrownError);
-			}
+            },
+            complete: function(){
+                getResults();
+            }
 
-		});
+        });
 	});
 	/* On dropdown change, empty old links and put new ones in */
 	$(function(){
@@ -157,7 +160,9 @@
             });
 
             $("#logout").click(function(){
-                $(location).attr('href',"login.html");
+                $.post('logout.php', {}, function(){
+                    $(location).attr('href',"login.html");
+                });
             });
 
             $("#changePassword").click(function(){
