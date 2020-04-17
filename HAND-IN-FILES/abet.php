@@ -31,9 +31,9 @@
               </tr>
             <tr>
 				<form id="results-form" method="POST">
-					<td><input type="number" id="not-meets" min="0"></td>
-					<td><input type="number" id="meets" min="0"></td>
-					<td><input type="number" id="exceeds" min="0"></td>
+					<td><input type="number" id="not-meets" min="0" required></td>
+					<td><input type="number" id="meets" min="0" required></td>
+					<td><input type="number" id="exceeds" min="0" required></td>
 					<td id="total"></td>
 				</form>
             </tr>
@@ -126,10 +126,10 @@
 					for (var i = 0; i < response.length; i++){
 						descriptions[i] = response[i]["assessmentDescription"];
 						weights[i] = response[i]["weight"];				
-						var rowOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
-						var rowTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>';
-						var rowThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
-						table.append(rowOne + rowTwo + rowThree);
+						var colOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
+						var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
+						var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+						table.append(colOne + colTwo + colThree);
 					}
 					$(".w").each(function(index){
 						$(this).val(weights[index]);
@@ -254,6 +254,14 @@
 			$(".success-or-err-msg").css("color", "red");
 			$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
 		}
+	});
+	$(".new-button").click(function(e){
+		e.preventDefault();
+		var table = $(".assessment-table");
+		var colOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
+		var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
+		var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+		table.append(colOne + colTwo + colThree);
 	});
 	</script>
   </body>
