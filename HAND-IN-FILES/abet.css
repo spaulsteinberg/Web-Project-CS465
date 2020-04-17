@@ -63,8 +63,12 @@ hr {
     padding-left: 35%;
 	position: absolute;
 }
-#inner-save-2 {
+#inner-save-2{
 	padding-left: 33%;
+	position: absolute;
+}
+#inner-save-3 {
+	padding-left: 34%;
 	position: absolute;
 }
 .save-results-btn {

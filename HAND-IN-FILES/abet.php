@@ -105,6 +105,7 @@
           </div>
         </div>
         </div>
+		<div id="inner-save-3"><p class="nar-msg"></p></div>
       </main>
     </div>
 	<script>
@@ -439,6 +440,7 @@
 		if(isNaN(outcome)){
 			outcome = initids[0];
 		}
+		var success = true;
 		$.ajax({
 			url: 'updateNarrative.php',
 			method: 'post',
@@ -456,12 +458,24 @@
 				}
 				else {
 					console.log("died in narrative php");
+					success = false;
 				}
 			},
 			error:function(xhr, ajaxOptions, thrownError){
 				console.log("narrative failed: " + thrownError);
+				success = false;
 			}
 		});
+		if (success){
+			$(".nar-msg").html("Narratives successfully saved");
+			$(".nar-msg").css("color", "black");
+			$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		}
+		else {
+			$(".nar-msg").html("Narratives unsuccessfully saved");
+			$(".nar-msg").css("color", "red");
+			$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		}
 	});
 	</script>
   </body>
