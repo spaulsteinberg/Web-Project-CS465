@@ -20,62 +20,73 @@
 
 	$conn = connect(); //set connection
 	if (!isset($_POST["sectionId"]) || $_POST["sectionId"] == '' || !is_numeric($_POST["sectionId"])){
-		die (json_encode(array('Error' => 'Must enter a section ID')));
+		die (-1);
 	}
 	else{
 		$sectionId = stripslashes(trim($_POST["sectionId"]));
 	}
 	if ((!isset($_POST["major"]) || $_POST["major"] == '')){
-		die (json_encode(array('Error' => 'Invalid or unset major')));
+		die (-1);
 	}
 	else
 	{
 		$approvedMajors = array('CS', 'CpE', 'EE');
-		if(!in_array($_POST["major"], $approvedMajors)) die (json_encode(array('Error' => 'Invalid or unset major')));
+		if(!in_array($_POST["major"], $approvedMajors)) die (-1);
 		$major = stripslashes(trim($_POST["major"]));
 	}
 	if (!isset($_POST["outcomeId"]) || $_POST["outcomeId"] == '' || !is_numeric($_POST["outcomeId"])){
-		die (json_encode(array('Error' => 'Must enter a valid outcome ID')));
+		die (-1);
 	}
 	else {
 		$outcomeId = stripslashes(trim($_POST["outcomeId"]));
 	}
 	if (!isset($_POST["weight"]) || $_POST["weight"] == '' || !is_numeric($_POST["weight"])){
-		die (json_encode(array('Error' => 'Must enter a valid weight')));
+		die (-1);
 	}
 	else {
 		$weight = stripslashes(trim($_POST["weight"]));
 	}
 	if (!isset($_POST["assessmentDescription"]) || $_POST["assessmentDescription"] == ''){
-		die (json_encode(array('Error' => 'Bad description')));
+		echo 0;
+		die (-1);
 	}
 	else {
 		$assessmentDescription = stripslashes(trim($_POST["assessmentDescription"]));
 		$assessmentDescription = mysqli_real_escape_string($conn, $assessmentDescription);
 	}
-	if (!isset($_POST["assessmentId"]) || $_POST["assessmentId"] == '' || !is_numeric($_POST["assessmentId"])){
-		die (json_encode(array('Error' => 'Must enter a valid number for assessment ID')));
-	}
-	else {
-		$assessmentId = stripslashes(trim($_POST["assessmentId"]));
-	}
-
 
 
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
-    $query = "INSERT INTO Assessments VALUES(?,?,?,?,?,?) 
-			  ON DUPLICATE KEY UPDATE sectionId=?, outcomeId=?, major=?, weight=?, assessmentDescription=?, assessmentId=?";
+    $query = "INSERT INTO Assessments (sectionId, assessmentDescription, weight, outcomeId, major) VALUES(?,?,?,?,?)";
 
 	$stmt = $conn->prepare($query);
-	$stmt->bind_param("iisiisiisisi", $assessmentId, $sectionId, $assessmentDescription, $weight, $outcomeId, $major, $sectionId, $outcomeId, $major, $weight, $assessmentDescription, $assessmentId);
+	$stmt->bind_param("isiis", $sectionId, $assessmentDescription, $weight, $outcomeId, $major);
 
 	if ($stmt->execute()) {
-		echo 1;
 		$stmt->close();
 	}
 	else {
 		echo 0;
 	}
+    $query = "SELECT assessmentId FROM  Assessments WHERE sectionId=? AND assessmentDescription=? AND weight=? AND outcomeId=? AND major=?";
+
+	$stmt = $conn->prepare($query);
+	$stmt->bind_param("isiis", $sectionId, $assessmentDescription, $weight, $outcomeId, $major);
+	if ($stmt->execute()) {
+		$stmt->bind_result($assessmentId);
+		$accepted = false;
+		while ($stmt->fetch()){
+			$accepted = true;
+			$aId = $assessmentId;
+		}
+		if (!$accepted){
+			echo 0;
+		}
+		else {
+			echo $aId; 
+		}
+	}
+	$stmt->close();
 	$conn->close();
 ?>

@@ -46,7 +46,7 @@
 	//set the query up, prepare the query to sanitize, bind the params, then execute. bind the results
 	//...the accepted is to see if anything came up, if false the email or pass is incorrect
     $query = "SELECT 
-				assessmentDescription, weight
+				assessmentId, assessmentDescription, weight
 			  FROM 
 				Assessments 
 			  WHERE 
@@ -61,12 +61,12 @@
 	$stmt->bind_param("isi", $outcomeId, $major, $sectionId);
 	$retArray = array();
 	if ($stmt->execute()) {
-		$stmt->bind_result($assessmentDescription, $weight);
+		$stmt->bind_result($assessmentId, $assessmentDescription, $weight);
 		$accepted = false;
 		while ($stmt->fetch()) {
 			$assessmentDescription = htmlspecialchars($assessmentDescription);
 			$accepted = true;
-			array_push($retArray, array('assessmentDescription' => $assessmentDescription, 'weight' => $weight));
+			array_push($retArray, array('assessmentDescription' => $assessmentDescription, 'weight' => $weight, 'assessId' => $assessmentId));
 		}
 		if(!$accepted){
 			echo 0;

@@ -67,6 +67,7 @@
 			success:function(response){
 				var links = $(".outcome-links");
 				for (var i = 0; i < response.length; i++){
+					console.log("in outcome links..." + response.length);
 					var outcomeId = response[i]["outcomeId"];
 					initids[i] = outcomeId;
 					var outcomeDescription = response[i]["outcomeDescription"];

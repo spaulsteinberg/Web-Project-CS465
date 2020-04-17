@@ -66,15 +66,18 @@
                 <th><strong>Remove</strong></th>
               </tr>
             </table>
-			</form>
         <br>
         <div class="new-img-button">
           <input type="image" class ="new-button" src="new-button.PNG">
         </div>
         <div class="save-assessments">
-          <button class="save-assessments-btn">Save Assessments</button>
+          <button type="submit" class="save-assessments-btn">Save Assessments</button>
         </div>
-        </div><br><br>
+        </div>
+		</form>
+		<div id="inner-save-2"><p class="assess-msg"></p></div>
+		
+		<br><br>
         <hr class="end-results" align="center">
         <div class="narrative-summary">
           <h1 class="container-header">Narrative Summary<hr></h1>
@@ -101,11 +104,32 @@
       </main>
     </div>
 	<script>
+	/* need function like this because dom made in ajax calls */
+	$(document).on("click", ".trash-pic", function(){
+		console.log(this.id);
+		$.ajax({
+			url: 'deleteAssessment',
+			method: 'post',
+			data : {assessmentId: parseInt(this.id, 10)},
+			success:function(response){
+				if (response == 1){
+					console.log("deleted");
+				}
+				else {
+					console.log("did not delete from db...");
+				}
+			},
+			error:function(xhr, ajaxOptions, thrownError){
+				console.log("failed: " + thrownError);
+			}
+		});
+		$(this).closest("tr").remove(); //actually removes row
+	});
 	function getAssessments(){	
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
 		var section = selectedCourse[1];
-			var outcome = window.location.href.slice(-1);
+		var outcome = window.location.href.slice(-1);
 		if (isNaN(outcome)){
 			outcome = initids[0];
 		}
@@ -125,10 +149,11 @@
 					var weights = new Array();
 					for (var i = 0; i < response.length; i++){
 						descriptions[i] = response[i]["assessmentDescription"];
-						weights[i] = response[i]["weight"];				
+						weights[i] = response[i]["weight"];
+						console.log("ID's: " + response[i]["assessId"]);
 						var colOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
 						var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
-						var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+						var colThree = '<td class="trash-can"><input id="'+response[i]["assessId"]+'" type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
 						table.append(colOne + colTwo + colThree);
 					}
 					$(".w").each(function(index){
@@ -197,7 +222,7 @@
 		var section = selectedCourse[1];
 		var outcome = window.location.href.slice(-1);
 		if(isNaN(outcome)){
-		outcome = initids[0];
+			outcome = initids[0];
 		}
 		var exceeds; var meets; var notMeets;
 		if ($("#exceeds").val() == '') exceeds = 0;
@@ -255,6 +280,7 @@
 			$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
 		}
 	});
+	/* new assessment button */
 	$(".new-button").click(function(e){
 		e.preventDefault();
 		var table = $(".assessment-table");
@@ -262,6 +288,97 @@
 		var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
 		var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
 		table.append(colOne + colTwo + colThree);
+	});
+	/* save assessments */
+	$(".save-assessments-btn").click(function(e){
+		e.preventDefault();
+		var selectedCourse = $("#sectionMenu").val().split(" ");
+		var major = selectedCourse[0];
+		var section = selectedCourse[1];
+		var outcome = window.location.href.slice(-1);
+		if (isNaN(outcome)){
+			outcome = initids[0];
+		}
+		var weights = new Array();
+		var descriptions = new Array();
+		var assessmentIds = new Array();
+		$(".w").each(function(index){
+				weights[index] = $(this).val();
+		});
+		$(".assess-description").each(function(index){
+				descriptions[index] = $(this).val();
+		});
+		/* if it has an id it was loaded. if it doesnt we need to call a new script to insert it and then get it */
+		var success;
+		$(".trash-pic").each(function(index){
+			success = true;
+			if (this.id == ''){
+				console.log("new script here");
+				$.ajax({
+					url: 'updateNewAssessment.php',
+					method: 'post',
+					data: {
+							sectionId: section,
+							major: major,
+							outcomeId: outcome,
+							weight: weights[index],
+							assessmentDescription: descriptions[index]
+					},
+					success:function(response){
+						if (response > 0){
+							console.log("success. Response: " + response);
+							$(this).attr('id', response); //set the new id
+							console.log("id is now: " + $(this).id);
+						}
+						else {
+							success = false;
+							console.log("query empty or failed: " + response);
+						}
+					},
+					error:function(xhr, ajaxOptions, thrownError){
+						console.log("failure: " + thrownError);
+						success = false;
+					}
+				});
+			}
+			else {
+				$.ajax({
+					url: 'updateAssessment.php',
+					method: 'post',
+					data: {
+							sectionId: section,
+							major: major,
+							outcomeId: outcome,
+							weight: weights[index],
+							assessmentDescription: descriptions[index],
+							assessmentId: parseInt(this.id, 10)
+					},
+					success:function(response){
+						if (response == 1){
+							console.log("success");
+						}
+						else {
+							console.log("query empty or failed");
+							success = false;
+						}
+					},
+					error:function(xhr, ajaxOptions, thrownError){
+						console.log("failure: " + thrownError);
+						success = false;
+					}
+				});
+			}
+		});
+		if (success){
+			$(".assess-msg").html("Assessments successfully saved");
+			$(".assess-msg").css("color", "black");
+			$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		}
+		else {
+			$(".assess-msg").html("Assessments unsuccessfully saved");
+			$(".assess-msg").css("color", "red");
+			$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		}
 	});
 	</script>
   </body>

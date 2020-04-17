@@ -19,11 +19,11 @@
 	ini_set('display_errors', 1); //set display error mode
 
 	$conn = connect(); //set connection
-	if (!isset($_GET["assessmentId"]) || $_GET["assessmentId"] == '' || !is_numeric($_GET["assessmentId"])){
+	if (!isset($_POST["assessmentId"]) || $_POST["assessmentId"] == '' || !is_numeric($_POST["assessmentId"])){
 		die (json_encode(array('Error' => 'Must enter a valid number for assessment ID')));
 	}
 	else {
-		$assessmentId = stripslashes(trim($_GET["assessmentId"]));
+		$assessmentId = stripslashes(trim($_POST["assessmentId"]));
 	}
 
     $query = "DELETE FROM Assessments
@@ -33,11 +33,10 @@
 	$stmt->bind_param("i", $assessmentId);
 
 	if ($stmt->execute()) {
-
-
+		echo 1;
 	}
 	else {
-		echo json_encode(array('msg' => 'Query failed.'));
+		echo 0;
 	}
 	$stmt->close();
 	$conn->close();

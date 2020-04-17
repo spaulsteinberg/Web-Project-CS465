@@ -63,6 +63,10 @@ hr {
     padding-left: 35%;
 	position: absolute;
 }
+#inner-save-2 {
+	padding-left: 33%;
+	position: absolute;
+}
 .save-results-btn {
     color: #fff;
     background-color: #337ab7;
