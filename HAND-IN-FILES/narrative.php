@@ -56,7 +56,7 @@
 
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("isi", $outcomeId, $major, $sectionId);
-
+	$retArray = array();
 	if ($stmt->execute()) {
 		$stmt->bind_result($strengths, $weaknesses, $actions);
 		$accepted = false;
@@ -65,15 +65,18 @@
 			$weaknesses = htmlspecialchars($weaknesses);
 			$actions = htmlspecialchars($actions);
 			$accepted = true;
-			echo json_encode(array('strengths' => $strengths, 'weaknesses' => $weaknesses, 'actions' => $actions), JSON_PRETTY_PRINT);
+			array_push($retArray, array('strengths' => $strengths, 'weaknesses' => $weaknesses, 'actions' => $actions));
 		}
 		if(!$accepted){
-			echo json_encode(array('msg' => 'No results'));
+			echo 0;
+		}
+		else {
+			echo json_encode($retArray);
 		}
 		$stmt->close();
 	}
 	else {
-		echo json_encode(array('msg' => 'Query failed.'));
+		echo 0;
 	}
 	$conn->close();
 ?>

@@ -99,6 +99,7 @@
             complete: function(){
                 getResults();
 				getAssessments();
+				getNarratives();
             }
 
         });

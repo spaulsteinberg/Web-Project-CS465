@@ -85,15 +85,19 @@
             <p>Please enter your name for each outcome, including the student strengths for the outcome, student
               weaknesses for the outcomes, and suggested actions for improving student attainment of each outcome.
               <br><br>
-              <strong class="narrative-separators">Strengths</strong>
-              <br>
-              <textarea class="narratives-text" rows="4" maxlength="2000" placeholder="None"></textarea>
-              <br><br>
-              <strong class="narrative-separators">Weaknesses</strong>
-              <textarea class="narratives-text" rows="4" maxlength="2000" placeholder="None"></textarea>
-              <br><br>
-              <strong class="narrative-separators">Actions</strong>
-              <textarea class="narratives-text" rows="4" maxlength="2000" placeholder="None"></textarea>
+			  <form id="narrative-form" method="POST">
+			  <div id="n-d">
+				<strong class="narrative-separators">Strengths</strong>
+				<br>
+				<textarea class="narratives-strengths" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<br><br>
+				<strong class="narrative-separators">Weaknesses</strong>
+				<textarea class="narratives-weaknesses" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<br><br>
+				<strong class="narrative-separators">Actions</strong>
+				<textarea class="narratives-actions" rows="4" maxlength="2000" placeholder="None"></textarea>
+			</div>
+			  </form>
             </p>
           </div>
           <div class="save-narratives">
@@ -125,6 +129,52 @@
 		});
 		$(this).closest("tr").remove(); //actually removes row
 	});
+	function getNarratives(){
+		var selectedCourse = $("#sectionMenu").val().split(" ");
+		var major = selectedCourse[0];
+		var section = selectedCourse[1];
+		var outcome = window.location.href.slice(-1);
+		if (isNaN(outcome)){
+			outcome = initids[0];
+		}
+		$.ajax({
+			url: 'narrative.php',
+			method: 'get',
+			dataType: 'json',
+			data: {sectionId: section, major: major, outcomeId: outcome},
+			success:function(response){
+				console.log(response);
+				if (response == 0){
+					console.log("no results in narratives");
+				}
+				else {
+					for (var i = 0; i < response.length; i++){
+						if (response[i]["strengths"] == ''){
+							$(".narratives-strengths").attr('placeholder', 'None');
+						}
+						else {
+							$(".narratives-strengths").val(response[i]["strengths"]);
+						}
+						if (response[i]["weaknesses"] == ''){
+							$(".narratives-weaknesses").attr('placeholder', 'None');
+						}
+						else {
+							$(".narratives-weaknesses").val(response[i]["weaknesses"]);
+						}
+						if (response[i]["actions"] == ''){
+							$(".narratives-actions").attr('placeholder', 'None');
+						}
+						else {
+							$(".narratives-actions").val(response[i]["actions"]);
+						}
+					}
+				}
+			},
+			error:function(xhr, ajaxOptions, thrownError){
+				console.log("failed loading narratives");
+			}
+		});
+	}
 	function getAssessments(){	
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
@@ -379,6 +429,39 @@
 			$(".assess-msg").css("color", "red");
 			$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
 		}
+	});
+	$(".save-narratives-btn").click(function(e){
+		e.preventDefault();
+		var selectedCourse = $("#sectionMenu").val().split(" ");
+		var major = selectedCourse[0];
+		var section = selectedCourse[1];
+		var outcome = window.location.href.slice(-1);
+		if(isNaN(outcome)){
+			outcome = initids[0];
+		}
+		$.ajax({
+			url: 'updateNarrative.php',
+			method: 'post',
+			data: {
+					sectionId: section,
+					major: major,
+					outcomeId: outcome,
+					strengths: $(".narratives-strengths").val(),
+					weaknesses:$(".narratives-weaknesses").val(),
+					actions: $(".narratives-actions").val()
+				},
+			success:function(response){
+				if (response == 1){
+					console.log("success");
+				}
+				else {
+					console.log("died in narrative php");
+				}
+			},
+			error:function(xhr, ajaxOptions, thrownError){
+				console.log("narrative failed: " + thrownError);
+			}
+		});
 	});
 	</script>
   </body>

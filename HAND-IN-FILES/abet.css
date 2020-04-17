@@ -171,9 +171,9 @@ hr {
     background-color: teal;
     cursor: pointer;
 }
-.main-narratives-description textarea {
+textarea {
     border-radius: 5px;
-    width: 100%;
+    width: 96%;
     font-size: 13pt;
     font-family: Arial, Helvetica, sans-serif;
     padding: 1% 0 0 1%;
@@ -183,7 +183,10 @@ hr {
     padding: 3px 0px 3px 3px;
     margin: 5px 1px 3px 0px;
     border: 1px solid rgba(81, 203, 238, 1);
-  }
+}
+#n-d{
+	padding-left: 3%;
+}
 .save-narratives{
     padding-top: 0;
     padding-left: 84%;
