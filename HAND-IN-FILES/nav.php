@@ -78,8 +78,6 @@
 					links.append(a);
 					$("#" + anchorId).attr('href', referenceString);
 				}
-				//var firstLink = $(".outcome-links a:eq(0)");
-				//$(location).attr('href', firstLink);
 				var description = $("#embedded-description");
                 var getOutcome = window.location.href.slice(-1);
                 if(isNaN(getOutcome)){
@@ -99,57 +97,11 @@
             },
             complete: function(){
                 getResults();
+				getAssessments();
             }
 
         });
 	});
-	/* On dropdown change, empty old links and put new ones in */
-	/*$(function(){
-		$("#sectionMenu").change(function(e){
-			e.preventDefault();
-			var selectedCourse = $(this).val().split(" ");
-			var ids = new Array();
-			var descriptions = new Array();
-			$.ajax({
-				url: 'outcomes.php',
-				method: 'get',
-				dataType: 'JSON',
-				data: {sectionId: selectedCourse[1], major: selectedCourse[0]},
-				success:function(response){
-					var links = $(".outcome-links");
-					links.empty();
-					links.append("<hr class='new-hr'>")
-					for (var i = 0; i < response.length; i++){
-						var outcomeId = response[i]["outcomeId"];
-						ids[i] = outcomeId;
-						var outcomeDescription = response[i]["outcomeDescription"];
-						descriptions[i] = outcomeDescription;
-						var referenceString = "abet.php?outcome=" + outcomeId;
-						var anchorId = "outcomeRef-" + outcomeId + "sectionRef-" + selectedCourse[1] + "majorRef-" + selectedCourse[0];
-						var a = "<a class='section-outcome' id='"+anchorId+"'><div id='"+outcomeId+"'>" + "Outcome <span class='outId'>" + outcomeId + "</span></div></a><hr class='new-hr'>";
-						links.append(a);
-						$("#" + anchorId).attr('href', referenceString);
-					}	
-                    var description = $("#embedded-description");
-                    //on dropdown change, i think it makes more sense to go back to first outcome
-					var getOutcome = ids[0];
-					for (var x = 0; x < ids.length; x++){
-						if (ids[x] == getOutcome){
-							var str = "<strong>Outcome " + getOutcome + " - " + selectedCourse[0] +  ": </strong>" + descriptions[x];
-							description.html(str);
-						}
-					}
-				},
-				error:function(xhr, ajaxOptions, thrownError){
-					console.log("failure");
-					console.log(xhr.responseText);
-					console.log(thrownError);
-				}
-
-			});
-
-		});
-    });*/
     /*password and stuff */
     $(document).ready(function(){
             $("#profile").click(function(){

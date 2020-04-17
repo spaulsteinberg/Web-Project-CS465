@@ -59,22 +59,25 @@
 
 	$stmt = $conn->prepare($query);
 	$stmt->bind_param("isi", $outcomeId, $major, $sectionId);
-
+	$retArray = array();
 	if ($stmt->execute()) {
 		$stmt->bind_result($assessmentDescription, $weight);
 		$accepted = false;
 		while ($stmt->fetch()) {
 			$assessmentDescription = htmlspecialchars($assessmentDescription);
 			$accepted = true;
-			echo json_encode(array('assessmentDescription' => $assessmentDescription, 'weight' => $weight), JSON_PRETTY_PRINT);
+			array_push($retArray, array('assessmentDescription' => $assessmentDescription, 'weight' => $weight));
 		}
 		if(!$accepted){
-			echo json_encode(array('msg' => 'No results'));
+			echo 0;
+		}
+		else {
+			echo json_encode($retArray);
 		}
 		$stmt->close();
 	}
 	else {
-		echo json_encode(array('msg' => 'Query failed.'));
+		echo 0;
 	}
 	$conn->close();
 ?>

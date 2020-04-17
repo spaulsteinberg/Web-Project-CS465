@@ -58,33 +58,15 @@
                 </li>
               </ol>
             </div>
+			<form id="assessment-form" method="POST">
             <table class="assessment-table">
               <tr>
                 <th><strong>Weight (%)</strong></th>
                 <th ><strong>Description</strong></th>
                 <th><strong>Remove</strong></th>
               </tr>
-        <tr>
-          <td class="weights"><input type="number" min="1"></td>
-          <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
-          <td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td>
-        </tr>
-        <tr>
-          <td class="weights"><input type="number" min="1"></td>
-          <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
-          <td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td>
-        </tr>
-        <tr>
-          <td class="weights"><input type="number" min="1"></td>
-          <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
-          <td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td>
-        </tr>
-        <tr>
-          <td class="weights"><input type="number" min="1"></td>
-          <td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>
-          <td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td>
-        </tr>
             </table>
+			</form>
         <br>
         <div class="new-img-button">
           <input type="image" class ="new-button" src="new-button.PNG">
@@ -119,14 +101,57 @@
       </main>
     </div>
 	<script>
+	function getAssessments(){	
+		var selectedCourse = $("#sectionMenu").val().split(" ");
+		var major = selectedCourse[0];
+		var section = selectedCourse[1];
+			var outcome = window.location.href.slice(-1);
+		if (isNaN(outcome)){
+			outcome = initids[0];
+		}
+		console.log("Outcome is: " + outcome + " init id's is: " + initids[0]);
+		$.ajax({
+			url: 'assessment.php',
+			method: 'get',
+			dataType: 'json',
+			data: { sectionId: section, major: major, outcomeId: outcome },
+			success:function(response){
+				if (response == 0){
+					console.log("Query empty or failed.");
+				}
+				else {
+					var table = $(".assessment-table");
+					var descriptions = new Array();
+					var weights = new Array();
+					for (var i = 0; i < response.length; i++){
+						descriptions[i] = response[i]["assessmentDescription"];
+						weights[i] = response[i]["weight"];				
+						var rowOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
+						var rowTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400"></textarea></td>';
+						var rowThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+						table.append(rowOne + rowTwo + rowThree);
+					}
+					$(".w").each(function(index){
+						$(this).val(weights[index]);
+					});
+					$(".assess-description").each(function(index){
+						$(this).val(descriptions[index]);
+					});
+				}
+			},
+			error:function(xhr, ajaxOptions, thrownError){
+				console.log("failed to get assessments");
+				console.log(thrownError);
+			}
+		});
+	}
 	function getResults(){
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
 		var section = selectedCourse[1];
 		var outcome = window.location.href.slice(-1);
 		if (isNaN(outcome)){
-			console.log("div is: " + $("#embedded-description").html());
-      outcome = initids[0];
+			outcome = initids[0];
 		}
 		console.log("Major: " + major + " " + "section: " + section + " outcome: " + outcome);
 		$.ajax({
@@ -170,10 +195,10 @@
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
 		var section = selectedCourse[1];
-    var outcome = window.location.href.slice(-1);
-    if(isNaN(outcome)){
-      outcome = initids[0];
-    }
+		var outcome = window.location.href.slice(-1);
+		if(isNaN(outcome)){
+		outcome = initids[0];
+		}
 		var exceeds; var meets; var notMeets;
 		if ($("#exceeds").val() == '') exceeds = 0;
 		else exceeds = parseInt($("#exceeds").val(), 10);
@@ -217,7 +242,7 @@
 		}
 		if (success){
 			$(".success-or-err-msg").html("Results successfully saved");
-			$(".success-or-err-msg").css("color", "green");
+			$(".success-or-err-msg").css("color", "black");
 			$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
 			$("#exceeds").val(exceeds);
 			$("#meets").val(meets);
