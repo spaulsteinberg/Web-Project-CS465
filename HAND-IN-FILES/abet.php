@@ -149,24 +149,25 @@
 					console.log("no results in narratives");
 				}
 				else {
+					/* .html(string).val() will decode the escape chars returned from server */
 					for (var i = 0; i < response.length; i++){
 						if (response[i]["strengths"] == ''){
 							$(".narratives-strengths").attr('placeholder', 'None');
 						}
 						else {
-							$(".narratives-strengths").val(response[i]["strengths"]);
+							$(".narratives-strengths").html(response[i]["strengths"]).val();
 						}
 						if (response[i]["weaknesses"] == ''){
 							$(".narratives-weaknesses").attr('placeholder', 'None');
 						}
 						else {
-							$(".narratives-weaknesses").val(response[i]["weaknesses"]);
+							$(".narratives-weaknesses").html(response[i]["weaknesses"]).val();
 						}
 						if (response[i]["actions"] == ''){
 							$(".narratives-actions").attr('placeholder', 'None');
 						}
 						else {
-							$(".narratives-actions").val(response[i]["actions"]);
+							$(".narratives-actions").html(response[i]["actions"]).val();
 						}
 					}
 				}
@@ -217,7 +218,7 @@
 						$(this).val(weights[index]);
 					});
 					$(".assess-description").each(function(index){
-						$(this).val(descriptions[index]);
+						$(this).html(descriptions[index]).val();
 					});
 				}
 			},
