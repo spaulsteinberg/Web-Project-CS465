@@ -5,10 +5,7 @@
       <link rel="stylesheet" type="text/css" href="abet.css">
 	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
       <meta charset="UTF-8">
-    <?php session_start(); ?>
-    <script>
-      var needToSave = false;
-    </script>
+	  <?php session_start(); ?>
     </head>
   <body>
       <?php include 'nav.php' ?>
@@ -92,13 +89,13 @@
 			  <div id="n-d">
 				<strong class="narrative-separators">Strengths</strong>
 				<br>
-				<textarea class="narratives-strengths" id="strengths" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<textarea class="narratives-strengths" rows="4" maxlength="2000" placeholder="None" required></textarea>
 				<br><br>
 				<strong class="narrative-separators">Weaknesses</strong>
-				<textarea class="narratives-weaknesses" id="weaknesses" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<textarea class="narratives-weaknesses" rows="4" maxlength="2000" placeholder="None" required></textarea>
 				<br><br>
 				<strong class="narrative-separators">Actions</strong>
-				<textarea class="narratives-actions" id="actions" rows="4" maxlength="2000" placeholder="None"></textarea>
+				<textarea class="narratives-actions" rows="4" maxlength="2000" placeholder="None"></textarea>
 			</div>
 			  </form>
             </p>
@@ -196,6 +193,12 @@
 			success:function(response){
 				if (response == 0){
 					console.log("Query empty or failed.");
+					var table = $(".assessment-table");
+					var colOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
+					var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
+					var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+					table.append(colOne + colTwo + colThree);
+					console.log("created blank row");
 				}
 				else {
 					var table = $(".assessment-table");
@@ -245,10 +248,6 @@
 					$("#meets").val('');
 					$("#exceeds").val('');
 					$("#total").html('');
-				/*	$("#not-meets").attr('placeholder', 0);
-					$("#meets").attr('placeholder', 0);
-					$("#exceeds").attr('placeholder', 0);
-					$("#total").html(0);*/
 				}
 				else {
 					$("#not-meets").val(response[0]["numberOfStudents"]);
@@ -263,6 +262,11 @@
 			}
 		});
 	}
+	$(function(){
+		$("#sectionMenu").change(function(e){
+			getResults();
+		});
+	});
 	/* on save go through each and make ajax calls for each performance level. update html as well */
 	$(".save-results-btn").click(function(e){
 		e.preventDefault();
@@ -274,11 +278,17 @@
 			outcome = initids[0];
 		}
 		var exceeds; var meets; var notMeets;
-		if ($("#exceeds").val() == '') exceeds = 0;
+		if ($("#exceeds").val() == '' || parseInt($("#exceeds").val(), 10) < 0 ){
+			return false;
+		}
 		else exceeds = parseInt($("#exceeds").val(), 10);
-		if ($("#meets").val() == '') meets = 0;
+		if ($("#meets").val() == '' || parseInt($("#meets").val(), 10) < 0 ){
+			return false;
+		}
 		else meets = parseInt($("#meets").val(), 10);
-		if ($("#not-meets").val() == '') notMeets = 0;
+		if ($("#not-meets").val() == '' || parseInt($("#not-meets").val(), 10) < 0 ){
+			return false;
+		}
 		else notMeets = parseInt($("#not-meets").val(), 10);
 		var total = exceeds + meets + notMeets;
 		console.log("total: " + total);
@@ -351,16 +361,30 @@
 		var weights = new Array();
 		var descriptions = new Array();
 		var assessmentIds = new Array();
+		var weightSum = 0;
 		$(".w").each(function(index){
-				weights[index] = $(this).val();
+				if ($(this).val() == '' ||  parseInt($(this).val(), 10) < 0 || $(this).val() == 'e' || $(this).val() == 'E'){
+					return false;
+				}
+				weights[index] = parseInt($(this).val(), 10);
+				weightSum += weights[index];
+				console.log(weightSum);
 		});
+		if (weightSum != 100){
+			$(".assess-msg").show();
+			$(".assess-msg").html("Weights must add to 100!");
+			return false;
+		}
+		$(".assess-msg").html(''); //clear error if successful
 		$(".assess-description").each(function(index){
-				descriptions[index] = $(this).val();
+			if ($(this).val() == ''){
+				return false;
+			}
+			descriptions[index] = $(this).val();
 		});
 		/* if it has an id it was loaded. if it doesnt we need to call a new script to insert it and then get it */
-		var success;
+		var success = true;
 		$(".trash-pic").each(function(index){
-			success = true;
 			if (this.id == ''){
 				console.log("new script here");
 				$.ajax({
@@ -382,6 +406,7 @@
 						else {
 							success = false;
 							console.log("query empty or failed: " + response);
+							console.log("succes in the fail is: " + success);
 						}
 					},
 					error:function(xhr, ajaxOptions, thrownError){
@@ -407,8 +432,8 @@
 							console.log("success");
 						}
 						else {
-							console.log("query empty or failed");
 							success = false;
+							console.log("query empty or failed, success is: " + false);
 						}
 					},
 					error:function(xhr, ajaxOptions, thrownError){
@@ -418,10 +443,12 @@
 				});
 			}
 		});
+		console.log("success value is: " + success)
 		if (success){
 			$(".assess-msg").html("Assessments successfully saved");
 			$(".assess-msg").css("color", "black");
 			$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+			console.log("in success");
 		}
 		else {
 			$(".assess-msg").html("Assessments unsuccessfully saved");
@@ -431,6 +458,9 @@
 	});
 	$(".save-narratives-btn").click(function(e){
 		e.preventDefault();
+		if ($(".narratives-strengths").val() == '' || $(".narratives-weaknesses").val() == ''){
+			return false;
+		}
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
 		var section = selectedCourse[1];
@@ -474,26 +504,7 @@
 			$(".nar-msg").css("color", "red");
 			$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
 		}
-  });
-  
-  $("#not-meets").change(function(){
-    needToSave = true;
-  });
-  $("#meets").change(function(){
-    needToSave = true;
-  });
-  $("#exceeds").change(function(){
-    needToSave = true;
-  });
-  $("#strengths").change(function(){
-    needToSave = true;
-  });
-  $("#weaknesses").change(function(){
-    needToSave = true;
-  });
-  $("#actions").change(function(){
-    needToSave = true;
-  });
+	});
 	</script>
   </body>
 </html>
