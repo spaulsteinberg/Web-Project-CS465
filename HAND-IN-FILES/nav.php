@@ -131,6 +131,9 @@
 
     $(document).ready(function(){
         $('#sectionMenu').on('change', function() {
+            if(checkForSave() === false){
+                return false;
+            }
             console.log("changing");
 			var selection = this.value;
             var sMajor = selection.split(" ")[0];
@@ -147,5 +150,16 @@
             });
         });
     });
+
+    function checkForSave(){
+        if(needToSave !== undefined && needToSave===true){
+            if(confirm('You have unsaved work! Are you sure you want to continue?')){
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
 	</script>
 </html>

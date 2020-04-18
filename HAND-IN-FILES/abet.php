@@ -5,7 +5,10 @@
       <link rel="stylesheet" type="text/css" href="abet.css">
 	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
       <meta charset="UTF-8">
-	  <?php session_start(); ?>
+    <?php session_start(); ?>
+    <script>
+      var needToSave = false;
+    </script>
     </head>
   <body>
       <?php include 'nav.php' ?>
@@ -89,13 +92,13 @@
 			  <div id="n-d">
 				<strong class="narrative-separators">Strengths</strong>
 				<br>
-				<textarea class="narratives-strengths" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<textarea class="narratives-strengths" id="strengths" rows="4" maxlength="2000" placeholder="None" required></textarea>
 				<br><br>
 				<strong class="narrative-separators">Weaknesses</strong>
-				<textarea class="narratives-weaknesses" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<textarea class="narratives-weaknesses" id="weaknesses" rows="4" maxlength="2000" placeholder="None" required></textarea>
 				<br><br>
 				<strong class="narrative-separators">Actions</strong>
-				<textarea class="narratives-actions" rows="4" maxlength="2000" placeholder="None"></textarea>
+				<textarea class="narratives-actions" id="actions" rows="4" maxlength="2000" placeholder="None"></textarea>
 			</div>
 			  </form>
             </p>
@@ -260,11 +263,6 @@
 			}
 		});
 	}
-	$(function(){
-		$("#sectionMenu").change(function(e){
-			getResults();
-		});
-	});
 	/* on save go through each and make ajax calls for each performance level. update html as well */
 	$(".save-results-btn").click(function(e){
 		e.preventDefault();
@@ -476,7 +474,26 @@
 			$(".nar-msg").css("color", "red");
 			$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
 		}
-	});
+  });
+  
+  $("#not-meets").change(function(){
+    needToSave = true;
+  });
+  $("#meets").change(function(){
+    needToSave = true;
+  });
+  $("#exceeds").change(function(){
+    needToSave = true;
+  });
+  $("#strengths").change(function(){
+    needToSave = true;
+  });
+  $("#weaknesses").change(function(){
+    needToSave = true;
+  });
+  $("#actions").change(function(){
+    needToSave = true;
+  });
 	</script>
   </body>
 </html>
