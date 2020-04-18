@@ -73,7 +73,7 @@
 					var outcomeDescription = response[i]["outcomeDescription"];
 					descriptions[i] = outcomeDescription;
 					var referenceString = "abet.php?outcome=" + outcomeId;
-					var anchorId = "outcomeRef-" + outcomeId + "sectionRef-" + selectedCourse[1] + "majorRef-" + selectedCourse[0];
+					var anchorId = "outcome" + outcomeId;
 					//need to give these dynamic, unique ID's and query strings -- see referenceString and anchorId
 					var a = "<a class='section-outcome' id='"+anchorId+"'><div id='"+outcomeId+"'>" + "Outcome <span class='outId'>" + outcomeId + "</span></div></a><hr class='new-hr'>";
 					links.append(a);
