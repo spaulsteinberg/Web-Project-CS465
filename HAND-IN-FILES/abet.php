@@ -279,14 +279,17 @@
 		}
 		var exceeds; var meets; var notMeets;
 		if ($("#exceeds").val() == '' || parseInt($("#exceeds").val(), 10) < 0 ){
+			resultsErrorMessage();
 			return false;
 		}
 		else exceeds = parseInt($("#exceeds").val(), 10);
 		if ($("#meets").val() == '' || parseInt($("#meets").val(), 10) < 0 ){
+			resultsErrorMessage();
 			return false;
 		}
 		else meets = parseInt($("#meets").val(), 10);
 		if ($("#not-meets").val() == '' || parseInt($("#not-meets").val(), 10) < 0 ){
+			resultsErrorMessage();
 			return false;
 		}
 		else notMeets = parseInt($("#not-meets").val(), 10);
@@ -325,20 +328,26 @@
 			});	
 		}
 		if (success){
-			$(".success-or-err-msg").html("Results successfully saved");
-			$(".success-or-err-msg").css("color", "black");
-			$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+			resultsSuccessMessage();	
 			$("#exceeds").val(exceeds);
 			$("#meets").val(meets);
 			$("#not-meets").val(notMeets);
 			$("#total").html(total);
 		}
 		else {
-			$(".success-or-err-msg").html("Results unsuccessfully saved");
-			$(".success-or-err-msg").css("color", "red");
-			$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+			resultsErrorMessage();
 		}
 	});
+	function resultsSuccessMessage(){
+		$(".success-or-err-msg").html("Results successfully saved");
+		$(".success-or-err-msg").css("color", "black");
+		$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+	}
+	function resultsErrorMessage(){
+		$(".success-or-err-msg").html("Results unsuccessfully saved");
+		$(".success-or-err-msg").css("color", "red");
+		$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+	}
 	/* new assessment button */
 	$(".new-button").click(function(e){
 		e.preventDefault();
@@ -362,13 +371,14 @@
 		var descriptions = new Array();
 		var assessmentIds = new Array();
 		var weightSum = 0;
+		var descriptionFlag = false;
 		$(".w").each(function(index){
-				if ($(this).val() == '' ||  parseInt($(this).val(), 10) < 0 || $(this).val() == 'e' || $(this).val() == 'E'){
-					return false;
-				}
-				weights[index] = parseInt($(this).val(), 10);
-				weightSum += weights[index];
-				console.log(weightSum);
+			if ($(this).val() == '' ||  parseInt($(this).val(), 10) < 0 || $(this).val() == 'e' || $(this).val() == 'E'){
+				return false;
+			}
+			weights[index] = parseInt($(this).val(), 10);
+			weightSum += weights[index];
+			console.log(weightSum);
 		});
 		if (weightSum != 100){
 			$(".assess-msg").show();
@@ -378,10 +388,16 @@
 		$(".assess-msg").html(''); //clear error if successful
 		$(".assess-description").each(function(index){
 			if ($(this).val() == ''){
+				descriptionFlag = true;
+				console.log("empty description");
 				return false;
 			}
 			descriptions[index] = $(this).val();
 		});
+		if (descriptionFlag){
+			assessmentsErrorMessage();
+			return false;
+		}
 		/* if it has an id it was loaded. if it doesnt we need to call a new script to insert it and then get it */
 		var success = true;
 		$(".trash-pic").each(function(index){
@@ -445,20 +461,26 @@
 		});
 		console.log("success value is: " + success)
 		if (success){
-			$(".assess-msg").html("Assessments successfully saved");
-			$(".assess-msg").css("color", "black");
-			$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
-			console.log("in success");
+			assessmentsSuccessMessage();
 		}
 		else {
-			$(".assess-msg").html("Assessments unsuccessfully saved");
-			$(".assess-msg").css("color", "red");
-			$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+			assessmentsErrorMessage();
 		}
 	});
+	function assessmentsSuccessMessage(){
+		$(".assess-msg").html("Assessments successfully saved");
+		$(".assess-msg").css("color", "black");
+		$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+	}
+	function assessmentsErrorMessage(){
+		$(".assess-msg").html("Assessments unsuccessfully saved");
+		$(".assess-msg").css("color", "red");
+		$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+	}
 	$(".save-narratives-btn").click(function(e){
 		e.preventDefault();
 		if ($(".narratives-strengths").val() == '' || $(".narratives-weaknesses").val() == ''){
+			narrativeErrorMessage();
 			return false;
 		}
 		var selectedCourse = $("#sectionMenu").val().split(" ");
@@ -495,16 +517,22 @@
 			}
 		});
 		if (success){
-			$(".nar-msg").html("Narratives successfully saved");
-			$(".nar-msg").css("color", "black");
-			$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+			narrativeSuccessMessage();
 		}
 		else {
-			$(".nar-msg").html("Narratives unsuccessfully saved");
-			$(".nar-msg").css("color", "red");
-			$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+			narrativeErrorMessage();
 		}
 	});
+	function narrativeSuccessMessage(){
+		$(".nar-msg").html("Narratives successfully saved");
+		$(".nar-msg").css("color", "black");
+		$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+	}
+	function narrativeErrorMessage(){
+		$(".nar-msg").html("Narratives unsuccessfully saved");
+		$(".nar-msg").css("color", "red");
+		$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+	}
 	</script>
   </body>
 </html>
