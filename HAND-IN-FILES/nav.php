@@ -106,34 +106,25 @@
 	});
     /*password and stuff */
     $(document).ready(function(){
-            $("#profile").click(function(){
-                if($("#userMenu").css("display")=="none"){
-                    $("#userMenu").css("display", "block");
-                } else {
-                    $("#userMenu").css("display", "none");
-                }
-            });
+        $("#profile").click(function(){
+            if($("#userMenu").css("display")=="none"){
+                $("#userMenu").css("display", "block");
+            } else {
+                $("#userMenu").css("display", "none");
+            }
+        });
 
-            $("#logout").click(function(){
-                $.post('logout.php', {}, function(){
-                    $(location).attr('href',"login.html");
-                });
-            });
-
-            $("#changePassword").click(function(){
-                $(location).attr('href',"password.php");
-                /*if($(".main-content").css("display")!="none"){
-                    $(".main-content").css("display", "none");
-                    $(".password-content").css("display", "block");
-                }*/
+        $("#logout").click(function(){
+            $.post('logout.php', {}, function(){
+                $(location).attr('href',"login.html");
             });
         });
 
-    $(document).ready(function(){
+        $("#changePassword").click(function(){
+            $(location).attr('href',"password.php");
+        });
+
         $('#sectionMenu').on('change', function() {
-            if(checkForSave() === false){
-                return false;
-            }
             console.log("changing");
 			var selection = this.value;
             var sMajor = selection.split(" ")[0];
@@ -150,16 +141,5 @@
             });
         });
     });
-
-    function checkForSave(){
-        if(needToSave !== undefined && needToSave===true){
-            if(confirm('You have unsaved work! Are you sure you want to continue?')){
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
 	</script>
 </html>

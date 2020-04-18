@@ -6,6 +6,9 @@
 	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
       <meta charset="UTF-8">
 	  <?php session_start(); ?>
+	  <script>
+	  	var needToSave = false;
+	  </script>
     </head>
   <body>
       <?php include 'nav.php' ?>
@@ -31,15 +34,15 @@
               </tr>
             <tr>
 				<form id="results-form" method="POST">
-					<td><input type="number" id="not-meets" min="0" required /></td>
-					<td><input type="number" id="meets" min="0" required /></td>
-					<td><input type="number" id="exceeds" min="0" required /></td>
+					<td><input type="number" id="notMeetsExpectations" min="0" required /></td>
+					<td><input type="number" id=meetsExpectations min="0" required /></td>
+					<td><input type="number" id=exceedsExpectations min="0" required /></td>
 				</form>
 					<td id="total"></td> <!-- keep outside of form to prevent dirty -->
             </tr>
             </table>
             <div class="save-results">
-                <button class="save-results-btn">Save Results</button>
+                <button class="save-results-btn" id="saveResults">Save Results</button>
             </div>
 			<div id="inner-save"><p class="success-or-err-msg"></p></div>
            <br><br><br>
@@ -71,7 +74,7 @@
           <input type="image" class ="new-button" src="new-button.PNG">
         </div>
         <div class="save-assessments">
-          <button type="submit" class="save-assessments-btn">Save Assessments</button>
+          <button type="submit" class="save-assessments-btn" id="saveAssessments">Save Assessments</button>
         </div>
         </div>
 		</form>
@@ -89,19 +92,19 @@
 			  <div id="n-d">
 				<strong class="narrative-separators">Strengths</strong>
 				<br>
-				<textarea class="narratives-strengths" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<textarea class="narratives-strengths" id="strengths" rows="4" maxlength="2000" placeholder="None" required></textarea>
 				<br><br>
 				<strong class="narrative-separators">Weaknesses</strong>
-				<textarea class="narratives-weaknesses" rows="4" maxlength="2000" placeholder="None" required></textarea>
+				<textarea class="narratives-weaknesses" id="weaknesses" rows="4" maxlength="2000" placeholder="None" required></textarea>
 				<br><br>
 				<strong class="narrative-separators">Actions</strong>
-				<textarea class="narratives-actions" rows="4" maxlength="2000" placeholder="None"></textarea>
+				<textarea class="narratives-actions" id="actions" rows="4" maxlength="2000" placeholder="None"></textarea>
 			</div>
 			  </form>
             </p>
           </div>
           <div class="save-narratives">
-            <button class="save-narratives-btn">Save Narrative</button>
+            <button class="save-narratives-btn" id="saveNarrative">Save Narrative</button>
           </div>
         </div>
         </div>
@@ -252,15 +255,15 @@
 			success:function(response){
 				console.log(response);
 				if (response == 0){
-					$("#not-meets").val('');
-					$("#meets").val('');
-					$("#exceeds").val('');
+					$("#notMeetsExpectations").val('');
+					$("#meetsExpectations").val('');
+					$("#exceedsExpectations").val('');
 					$("#total").html('');
 				}
 				else {
-					$("#not-meets").val(response[0]["numberOfStudents"]);
-					$("#meets").val(response[1]["numberOfStudents"]);
-					$("#exceeds").val(response[2]["numberOfStudents"]);
+					$("#notMeetsExpectations").val(response[0]["numberOfStudents"]);
+					$("#meetsExpectations").val(response[1]["numberOfStudents"]);
+					$("#exceedsExpectations").val(response[2]["numberOfStudents"]);
 					$("#total").html(response[0]["numberOfStudents"]+response[1]["numberOfStudents"]+response[2]["numberOfStudents"]);
 				}
 			},
@@ -270,11 +273,6 @@
 			}
 		});
 	}
-	$(function(){
-		$("#sectionMenu").change(function(e){
-			getResults();
-		});
-	});
 	/* on save go through each and make ajax calls for each performance level. update html as well */
 	$(".save-results-btn").click(function(e){
 		e.preventDefault();
@@ -286,21 +284,21 @@
 			outcome = initids[0];
 		}
 		var exceeds; var meets; var notMeets;
-		if ($("#exceeds").val() == '' || parseInt($("#exceeds").val(), 10) < 0 ){
+		if ($("#exceedsExpectations").val() == '' || parseInt($("#exceedsExpectations").val(), 10) < 0 ){
 			resultsErrorMessage();
 			return false;
 		}
-		else exceeds = parseInt($("#exceeds").val(), 10);
-		if ($("#meets").val() == '' || parseInt($("#meets").val(), 10) < 0 ){
+		else exceeds = parseInt($("#exceedsExpectations").val(), 10);
+		if ($("#meetsExpectations").val() == '' || parseInt($("#meetsExpectations").val(), 10) < 0 ){
 			resultsErrorMessage();
 			return false;
 		}
-		else meets = parseInt($("#meets").val(), 10);
-		if ($("#not-meets").val() == '' || parseInt($("#not-meets").val(), 10) < 0 ){
+		else meets = parseInt($("#meetsExpectations").val(), 10);
+		if ($("#notMeetsExpectations").val() == '' || parseInt($("#notMeetsExpectations").val(), 10) < 0 ){
 			resultsErrorMessage();
 			return false;
 		}
-		else notMeets = parseInt($("#not-meets").val(), 10);
+		else notMeets = parseInt($("#notMeetsExpectations").val(), 10);
 		var total = exceeds + meets + notMeets;
 		console.log("total: " + total);
 		var numberOfStudents = [exceeds, meets, notMeets];
@@ -336,10 +334,11 @@
 			});	
 		}
 		if (success){
+			needToSave = false;
 			resultsSuccessMessage();	
-			$("#exceeds").val(exceeds);
-			$("#meets").val(meets);
-			$("#not-meets").val(notMeets);
+			$("#exceedsExpectations").val(exceeds);
+			$("#meetsExpectations").val(meets);
+			$("#notMeetsExpectations").val(notMeets);
 			$("#total").html(total);
 		}
 		else {
@@ -469,6 +468,7 @@
 		});
 		console.log("success value is: " + success)
 		if (success){
+			needToSave = false;
 			assessmentsSuccessMessage();
 		}
 		else {
@@ -525,6 +525,7 @@
 			}
 		});
 		if (success){
+			needToSave = false;
 			narrativeSuccessMessage();
 		}
 		else {
@@ -541,6 +542,30 @@
 		$(".nar-msg").css("color", "red");
 		$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
 	}
+	$("#notMeetsExpectations, #meetsExpectations, #exceedsExpectations").change(function(){
+		$('#total').html(parseInt($('#notMeetsExpectations').val()) + parseInt($('#meetsExpectations').val()) + parseInt($('#exceedsExpectations').val()));
+		needToSave = true;
+	});
+	$('#narrative-form textarea').change(function(){
+		needToSave = true;
+	});
+	$('#assessment-form').on('change', 'input', function(){
+		needToSave = true;
+	});
+	$('#assessment-form').on('change', 'textarea', function(){
+		needToSave = true;
+	});
+	$('#assessment-form').on('click', '.trash-pic', function(){
+		needToSave = true;
+	});
+	$('#saveResults, #saveAssessments, #saveNarrative').click(function(){
+		needToSave = false;
+	});
+	$(window).on('beforeunload', function(){
+		if(needToSave){
+			return "You have unsaved changes! Are you sure you want to leave?";
+		}
+	})
 	</script>
   </body>
 </html>
