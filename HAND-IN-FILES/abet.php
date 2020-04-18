@@ -31,11 +31,11 @@
               </tr>
             <tr>
 				<form id="results-form" method="POST">
-					<td><input type="number" id="not-meets" min="0" required></td>
-					<td><input type="number" id="meets" min="0" required></td>
-					<td><input type="number" id="exceeds" min="0" required></td>
-					<td id="total"></td>
+					<td><input type="number" id="not-meets" min="0" required /></td>
+					<td><input type="number" id="meets" min="0" required /></td>
+					<td><input type="number" id="exceeds" min="0" required /></td>
 				</form>
+					<td id="total"></td> <!-- keep outside of form to prevent dirty -->
             </tr>
             </table>
             <div class="save-results">
@@ -130,6 +130,13 @@
 		});
 		$(this).closest("tr").remove(); //actually removes row
 	});
+	/*var pre;
+	$(window).on('load',function(){
+		console.log("here");
+		post = $("#results-from").serialize();
+		if (post != pre) console.log("changes");
+		else console.log("clean");
+	});*/
 	function getNarratives(){
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
@@ -195,7 +202,7 @@
 				if (response == 0){
 					console.log("Query empty or failed.");
 					var table = $(".assessment-table");
-					var colOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
+					var colOne = '<tr><td class="weights"><input class="w" type="number" min="1" required></td>';
 					var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
 					var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
 					table.append(colOne + colTwo + colThree);
@@ -209,7 +216,7 @@
 						descriptions[i] = response[i]["assessmentDescription"];
 						weights[i] = response[i]["weight"];
 						console.log("ID's: " + response[i]["assessId"]);
-						var colOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
+						var colOne = '<tr><td class="weights"><input class="w" type="number" min="1" required></td>';
 						var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
 						var colThree = '<td class="trash-can"><input id="'+response[i]["assessId"]+'" type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
 						table.append(colOne + colTwo + colThree);
