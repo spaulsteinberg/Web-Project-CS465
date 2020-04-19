@@ -44,7 +44,8 @@
             <div class="save-results">
                 <button class="save-results-btn" id="saveResults">Save Results</button>
             </div>
-			<div id="inner-save"><p class="success-or-err-msg"></p></div>
+			<div id="inner-save"><p id="resultsSuccess"></p></div>
+			<div id="inner-save"><p id="resultsFail"></p></div>
            <br><br><br>
             <hr class="end-results" align="center">
           </div>
@@ -78,8 +79,9 @@
         </div>
         </div>
 		</form>
-		<div id="inner-save-2"><p class="assess-msg"></p></div>
-		
+		<div id="inner-save-2"><p id="assessmentsSuccess"></p></div>
+		<div id="inner-save-2"><p id="assessmentsFail"></p></div>
+		<div id="inner-save-2"><p id="weightsNot100"></p></div>
 		<br><br>
         <hr class="end-results" align="center">
         <div class="narrative-summary">
@@ -108,7 +110,8 @@
           </div>
         </div>
         </div>
-		<div id="inner-save-3"><p class="nar-msg"></p></div>
+		<div id="inner-save-3"><p id="narrativeSuccess"></p></div>
+		<div id="inner-save-3"><p id="narrativeFail"></p></div>
       </main>
     </div>
 	<script>
@@ -133,13 +136,6 @@
 		});
 		$(this).closest("tr").remove(); //actually removes row
 	});
-	/*var pre;
-	$(window).on('load',function(){
-		console.log("here");
-		post = $("#results-from").serialize();
-		if (post != pre) console.log("changes");
-		else console.log("clean");
-	});*/
 	function getNarratives(){
 		var selectedCourse = $("#sectionMenu").val().split(" ");
 		var major = selectedCourse[0];
@@ -346,14 +342,14 @@
 		}
 	});
 	function resultsSuccessMessage(){
-		$(".success-or-err-msg").html("Results successfully saved");
-		$(".success-or-err-msg").css("color", "black");
-		$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		$("#resultsSuccess").html("Results successfully saved");
+		$("#resultsSuccess").css("color", "black");
+		$("#resultsSuccess").fadeIn('slow').delay(3000).fadeOut('fast');
 	}
 	function resultsErrorMessage(){
-		$(".success-or-err-msg").html("Results unsuccessfully saved");
-		$(".success-or-err-msg").css("color", "red");
-		$(".success-or-err-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		$("#resultsFail").html("Results unsuccessfully saved");
+		$("#resultsFail").css("color", "red");
+		$("#resultsFail").fadeIn('slow').delay(3000).fadeOut('fast');
 	}
 	/* new assessment button */
 	$(".new-button").click(function(e){
@@ -388,11 +384,11 @@
 			console.log(weightSum);
 		});
 		if (weightSum != 100){
-			$(".assess-msg").show();
-			$(".assess-msg").html("Weights must add to 100!");
+			$("#weightsNot100").show();
+			$("#weightsNot100").html("Weights must add to 100!");
 			return false;
 		}
-		$(".assess-msg").html(''); //clear error if successful
+		$("#weightsNot100").html(''); //clear error if successful
 		$(".assess-description").each(function(index){
 			if ($(this).val() == ''){
 				descriptionFlag = true;
@@ -476,14 +472,14 @@
 		}
 	});
 	function assessmentsSuccessMessage(){
-		$(".assess-msg").html("Assessments successfully saved");
-		$(".assess-msg").css("color", "black");
-		$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		$("#assessmentsSuccess").html("Assessments successfully saved");
+		$("#assessmentsSuccess").css("color", "black");
+		$("#assessmentsSuccess").fadeIn('slow').delay(3000).fadeOut('fast');
 	}
 	function assessmentsErrorMessage(){
-		$(".assess-msg").html("Assessments unsuccessfully saved");
-		$(".assess-msg").css("color", "red");
-		$(".assess-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		$("#assessmentsFail").html("Assessments unsuccessfully saved");
+		$("#assessmentsFail").css("color", "red");
+		$("#assessmentsFail").fadeIn('slow').delay(3000).fadeOut('fast');
 	}
 	$(".save-narratives-btn").click(function(e){
 		e.preventDefault();
@@ -533,14 +529,14 @@
 		}
 	});
 	function narrativeSuccessMessage(){
-		$(".nar-msg").html("Narratives successfully saved");
-		$(".nar-msg").css("color", "black");
-		$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		$("#narrativeSuccess").html("Narratives successfully saved");
+		$("#narrativeSuccess").css("color", "black");
+		$("#narrativeSuccess").fadeIn('slow').delay(3000).fadeOut('fast');
 	}
 	function narrativeErrorMessage(){
-		$(".nar-msg").html("Narratives unsuccessfully saved");
-		$(".nar-msg").css("color", "red");
-		$(".nar-msg").fadeIn('slow').delay(3000).fadeOut('fast');
+		$("#narrativeFail").html("Narratives unsuccessfully saved");
+		$("#narrativeFail").css("color", "red");
+		$("#narrativeFail").fadeIn('slow').delay(3000).fadeOut('fast');
 	}
 	$("#notMeetsExpectations, #meetsExpectations, #exceedsExpectations").change(function(){
 		$('#total').html(parseInt($('#notMeetsExpectations').val()) + parseInt($('#meetsExpectations').val()) + parseInt($('#exceedsExpectations').val()));
