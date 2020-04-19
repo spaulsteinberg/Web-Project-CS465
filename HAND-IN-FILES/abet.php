@@ -137,6 +137,25 @@
 			}
 		});
 		$(this).closest("tr").remove(); //actually removes row
+		weightCount = 1;
+		var weight; var desc; var trash;
+		$(".w").each(function(index){
+			weight = "weight" + weightCount;
+			$(this).attr('id', weight);
+			weightCount++;
+		});
+		weightCount = 1;
+		$(".assess-description").each(function(index){
+			desc = "assessment" + weightCount;
+			$(this).attr('id', desc);
+			weightCount++;
+		});
+		weightCount = 1;
+		$(".trash-pic").each(function(index){
+			trash = "trash" + weightCount;
+			$(this).attr('id', trash);
+			weightCount++;
+		});
 	});
 	function getNarratives(){
 		var selectedCourse = $("#sectionMenu").val().split(" ");
