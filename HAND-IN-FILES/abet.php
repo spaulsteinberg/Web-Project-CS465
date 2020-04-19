@@ -72,7 +72,7 @@
             </table>
         <br>
         <div class="new-img-button">
-          <input type="image" class ="new-button" src="new-button.PNG">
+          <input type="image" id="newAssessment" class ="new-button" src="new-button.PNG">
         </div>
         <div class="save-assessments">
           <button type="submit" class="save-assessments-btn" id="saveAssessments">Save Assessments</button>
