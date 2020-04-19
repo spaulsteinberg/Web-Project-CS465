@@ -115,13 +115,15 @@
       </main>
     </div>
 	<script>
+	var weightCount = 1;
 	/* need function like this because dom made in ajax calls */
 	$(document).on("click", ".trash-pic", function(){
 		console.log(this.id);
+		var assessId = $(this).attr("name");
 		$.ajax({
 			url: 'deleteAssessment',
 			method: 'post',
-			data : {assessmentId: parseInt(this.id, 10)},
+			data : {assessmentId: parseInt(assessId, 10)},
 			success:function(response){
 				if (response == 1){
 					console.log("deleted");
@@ -188,6 +190,7 @@
 		var major = selectedCourse[0];
 		var section = selectedCourse[1];
 		var outcome = window.location.href.slice(-1);
+		var weightId; var descId; var trash;
 		if (isNaN(outcome)){
 			outcome = initids[0];
 		}
@@ -200,10 +203,13 @@
 			success:function(response){
 				if (response == 0){
 					console.log("Query empty or failed.");
+					weightId = "weight" + weightCount;
+					descId = "assessment" + weightCount;
+					trash = "trash" + weightCount;
 					var table = $(".assessment-table");
-					var colOne = '<tr><td class="weights"><input class="w" type="number" min="1" required></td>';
-					var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
-					var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+					var colOne = '<tr><td class="weights"><input class="w" id="'+weightId+'" type="number" min="1" required></td>';
+					var colTwo = '<td><textarea class="assess-description" id="'+descId+'" rows="4" cols="110" maxlength="400" required></textarea></td>';
+					var colThree = '<td class="trash-can"><input id="'+trash+'" name="" type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
 					table.append(colOne + colTwo + colThree);
 					console.log("created blank row");
 				}
@@ -215,10 +221,14 @@
 						descriptions[i] = response[i]["assessmentDescription"];
 						weights[i] = response[i]["weight"];
 						console.log("ID's: " + response[i]["assessId"]);
-						var colOne = '<tr><td class="weights"><input class="w" type="number" min="1" required></td>';
-						var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
-						var colThree = '<td class="trash-can"><input id="'+response[i]["assessId"]+'" type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+						weightId = "weight" + weightCount;
+						descId = "assessment" + weightCount;
+						trash = "trash" + weightCount;
+						var colOne = '<tr><td class="weights"><input class="w" id="'+weightId+'" type="number" min="1" required></td>';
+						var colTwo = '<td><textarea class="assess-description" id="'+descId+'" rows="4" cols="110" maxlength="400" required></textarea></td>';
+						var colThree = '<td class="trash-can"><input id="'+trash+'" name="'+response[i]["assessId"]+'" type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
 						table.append(colOne + colTwo + colThree);
+						weightCount++;
 					}
 					$(".w").each(function(index){
 						$(this).val(weights[index]);
@@ -355,10 +365,14 @@
 	$(".new-button").click(function(e){
 		e.preventDefault();
 		var table = $(".assessment-table");
-		var colOne = '<tr><td class="weights"><input class="w" type="number" min="1"></td>';
-		var colTwo = '<td><textarea class="assess-description" rows="4" cols="110" maxlength="400" required></textarea></td>';
-		var colThree = '<td class="trash-can"><input type="image" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
+		var weightId = "weight" + weightCount;
+		var descId = "assessment" + weightCount;
+		var trash = "trash" + weightCount;
+		var colOne = '<tr><td class="weights"><input class="w" id="'+weightId+'" type="number" min="1"></td>';
+		var colTwo = '<td><textarea class="assess-description" id="'+descId+'" rows="4" cols="110" maxlength="400" required></textarea></td>';
+		var colThree = '<td class="trash-can"><input type="image" id="'+trash+'" name="" class="trash-pic" src="trash.png" alt="trash.png"></td></tr>';
 		table.append(colOne + colTwo + colThree);
+		weightCount++;
 	});
 	/* save assessments */
 	$(".save-assessments-btn").click(function(e){
@@ -403,8 +417,11 @@
 		}
 		/* if it has an id it was loaded. if it doesnt we need to call a new script to insert it and then get it */
 		var success = true;
+		var name;
 		$(".trash-pic").each(function(index){
-			if (this.id == ''){
+			name = $(this).attr("name");
+			console.log("name is: " + name);
+			if (name == ''){
 				console.log("new script here");
 				$.ajax({
 					url: 'updateNewAssessment.php',
@@ -419,7 +436,7 @@
 					success:function(response){
 						if (response > 0){
 							console.log("success. Response: " + response);
-							$(this).attr('id', response); //set the new id
+							$(this).attr('name', response); //set the new id
 							console.log("id is now: " + $(this).id);
 						}
 						else {
@@ -435,6 +452,8 @@
 				});
 			}
 			else {
+				name = $(this).attr("name");
+				console.log("name is: " + name);
 				$.ajax({
 					url: 'updateAssessment.php',
 					method: 'post',
@@ -444,7 +463,7 @@
 							outcomeId: outcome,
 							weight: weights[index],
 							assessmentDescription: descriptions[index],
-							assessmentId: parseInt(this.id, 10)
+							assessmentId: parseInt(name, 10)
 					},
 					success:function(response){
 						if (response == 1){
