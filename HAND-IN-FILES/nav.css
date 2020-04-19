@@ -81,8 +81,6 @@ nav {
   padding: 2% 0 2% 6%;
   border-radius: 5px;
   font-size: larger;
-  -moz-appearance: none;
-  -webkit-appearance: none;
 }
 .course-dropdown::-ms-expand {
   display: none;
@@ -105,4 +103,8 @@ a div {
 .new-hr {
     border-top: 1px solid lightgray;
     margin: 0;
+}
+
+.selected-outcome {
+    background-color: #dbdbdb;
 }

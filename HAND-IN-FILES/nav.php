@@ -89,7 +89,10 @@
 						var str = "<strong>Outcome " + getOutcome + " - " + selectedCourse[0] +  ": </strong>" + descriptions[x];
 						description.html(str);
 					}
-				}
+                }
+                if(window.location.pathname.includes('abet.php')){
+                    $("#outcome" + getOutcome + " div").addClass("selected-outcome");
+                }
 			},
 			error:function(xhr, ajaxOptions, thrownError){
 				console.log("failure");
