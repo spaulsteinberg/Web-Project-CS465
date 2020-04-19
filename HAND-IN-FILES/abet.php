@@ -34,9 +34,9 @@
               </tr>
             <tr>
 				<form id="results-form" method="POST">
-					<td><input type="number" id="notMeetsExpectations" min="0" required /></td>
-					<td><input type="number" id=meetsExpectations min="0" required /></td>
-					<td><input type="number" id=exceedsExpectations min="0" required /></td>
+					<td><input type="number" id="notMeetsExpectations" min="0" value="0" required /></td>
+					<td><input type="number" id=meetsExpectations min="0" value="0" required /></td>
+					<td><input type="number" id=exceedsExpectations min="0" value="0" required /></td>
 				</form>
 					<td id="total"></td> <!-- keep outside of form to prevent dirty -->
             </tr>
@@ -251,10 +251,10 @@
 			success:function(response){
 				console.log(response);
 				if (response == 0){
-					$("#notMeetsExpectations").val('');
-					$("#meetsExpectations").val('');
-					$("#exceedsExpectations").val('');
-					$("#total").html('');
+					$("#notMeetsExpectations").val(0);
+					$("#meetsExpectations").val(0);
+					$("#exceedsExpectations").val(0);
+					$("#total").html(0);
 				}
 				else {
 					$("#notMeetsExpectations").val(response[0]["numberOfStudents"]);
